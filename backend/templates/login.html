@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <section>
+        
+        <div class="navbar">
+            <div class="logo">
+                <h1>📔 My Journal</h1>
+            </div>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+
+    </section>
+    <div class="loginn">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required >
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required >
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button type="submit" onclick="url('journal.html')">Login</button>
+    </div>
+    <div id="message">
+        <h4>Dont have an account?</h4><h4><a href="register.html">Register here</a></h4>
+    </div>
+</body>
+<style>body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #652972, #9b5c91,#bc258f);
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+
+}
+
+</style>

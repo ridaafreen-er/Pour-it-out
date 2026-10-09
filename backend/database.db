@@ -1,0 +1,14 @@
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE journal (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    text TEXT,
+    mood TEXT,
+    date TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

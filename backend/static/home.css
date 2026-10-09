@@ -1,0 +1,95 @@
+h2{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #e4e3e3;
+    padding-top: 100px;
+    padding-bottom: 20px;
+}
+body{
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+background: linear-gradient(to bottom, #a0a5ba, #bd9acb, #8e7ca9);    image-rendering: pixelated;
+    background-size: cover;
+    background-position: center;
+    flex: 0 0 auto;
+    background-attachment: flex;
+}
+.homeSection{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 100px;
+    background-attachment: fixed;
+    padding-bottom: 130px;
+    }
+
+.navbar li a {
+    color: rgb(255, 254, 254);
+    padding: 14px 16px;
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+}
+.navbar li a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 20px;
+}
+.navbar .logo h1 {
+    font-size: 24px;
+    color: #e4e3e3;
+    margin: 0;
+    padding: 14px 16px;
+    float: left;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #a0a5ba, #a139ca, #bc57ba);
+    border-bottom: 1px solid #0d1f36;
+    border-inline-end-color: #1b3e6c;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+p{
+    text-align: center;
+    font-size: 18px;
+    color: #e4e3e3;
+    text-decoration-thickness: calc(6px);
+    text-decoration: dotted;
+    margin-top: 20px;
+    font-weight: bold;
+}
+button{
+    background-color: #4e374a;
+    color: white;
+    font-weight: bold;
+    padding: 2% 30px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+    text-decoration: blanchedalmond;
+}
+button:hover {
+    background-color: #1b3e6c;
+}
+button:active {
+    background-color: #0d1f36;
+}
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 94, 157, 0.5);
+}
+

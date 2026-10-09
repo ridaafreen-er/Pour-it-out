@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Journal App</title>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+/>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+<body>
+
+<button class="menu-btn" onclick="toggleNav()">☰ Menu</button>
+
+<div id="sidebar" class="sidebar">
+    <a href="home.html">Home</a>
+    <a href="login.html">logout</a>
+    
+</div>
+
+<div class="app">
+
+  <header class="header">
+    <h1>📔 My Journal</h1>
+    <p>Speak or write your thoughts</p>
+    <button class="Home" onclick="window.location.href='home.html'"><i class="bi bi-house-door"></i></button>
+    <input type="text" id="searchInput" placeholder="Search entries..." oninput="searchEntries()" />
+  </header>
+
+  <form id="journalForm" class="journal-form">
+    <textarea 
+      id="entry" 
+      placeholder="How was your day, Aafu? 🌙" 
+      required>
+    </textarea>
+
+    <div class="actions">
+        <div class="moods">
+  <span onclick="setMood('😊')">😊</span>
+  <span onclick="setMood('😐')">😐</span>
+  <span onclick="setMood('😔')">😔</span>
+  <span onclick="setMood('😡')">😡</span>
+</div>
+    <button type="button" onclick="toggleTheme()">🌙</button>
+
+
+      <button type="button" onclick="startRecording()">🎙 Speak</button>
+      <button type="submit">➕ Add</button>
+    </div>
+  </form>
+
+  <section class="entries-section">
+    <h2>Previous Entries</h2>
+    <div id="journalCards"></div>
+  </section>
+  
+
+  
+
+</div>
+
+<section>
+  <div class="journalentrytracker">
+    <h2>Journal Tracker</h2>
+    <div id="tracker"></div>
+  </div>
+  <!-- <div class="video-section">
+    <video class="video" id="camera" autoplay playsinline></video>
+  </section> -->
+
+
+</body>
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #c38eb4, #8f94fb);
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  
+}
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+}
+
+.menu-btn{
+    padding:12px 20px;
+    font-size:10px;
+    cursor:pointer;
+    margin:10px;
+    left:0;
+    top:0;
+    align-items:left;
+    height:50px;
+    width:100px;
+    color:white;
+    border:none;
+    border-radius:4px;
+    background:linear-gradient(135deg, #c38eb4, #8f94fb);
+}
+
+.sidebar{
+    width:0;
+    height:100vh;
+    position:fixed;
+    top:0;
+    left:0;
+    background:#222;
+    overflow-x:hidden;
+    transition:0.4s;
+    padding-top:60px;
+}
+#tracker{
+    display:grid;
+    grid-template-columns:repeat(7,22px);
+    gap:6px;
+    padding: 50px;
+    align-items:upper;
+}
+h2{
+    color:white;
+    text-align:center;
+}
+
+.box{
+    width: 15px;
+    height:15px;
+    gap: 3px;
+    border-radius:4px;
+    background:#ddd;
+
+}
+
+.active{
+    background:#2ea043; /* GitHub green */
+}
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 20px;
+    font-size:20px;
+}
+
+video{
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.sidebar a:hover{
+    background:#444;
+}
+
+.app {
+  width: 700px;
+  height: auto;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  align-items: left;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 26px;
+  color: #fff;
+}
+
+.header p {
+  color: #f1f1f1;
+  font-size: 14px;
+}
+
+/* FORM */
+.journal-form textarea {
+  width: 100%;
+  height: 120px;
+  border-radius: 18px;
+  border: none;
+  padding: 15px;
+  font-size: 14px;
+  outline: none;
+  resize: none;
+  background: rgba(255,255,255,0.85);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.actions button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  transition: 0.3s;
+}
+
+.actions button:first-child {
+  background: #6a5acd;
+}
+
+.actions button:last-child {
+  background: #00c897;
+}
+
+.actions button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* ENTRIES */
+.entries-section {
+  margin-top: 25px;
+}
+
+.entries-section h2 {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.entry-card {
+  background: rgba(255,255,255,0.85);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
+  animation: fadeIn 0.4s ease;
+}
+
+.entry-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.entry-card small {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.moods {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.moods span:hover {
+  transform: scale(1.3);
+}
+
+</style>
+<script>
+function toggleNav() {
+    let sidebar = document.getElementById("sidebar");
+
+    if(sidebar.style.width === "220px"){
+        sidebar.style.width = "0";
+    } else {
+        sidebar.style.width = "220px";
+    }
+}
+
+const tracker=document.getElementById("tracker");
+
+const entries=JSON.parse(localStorage.getItem("journalEntries")) || [];
+
+const dates=entries.map(e=>e.date.split(",")[0]);
+
+for(let i=0;i<30;i++){
+
+    const box=document.createElement("div");
+    box.classList.add("box");
+
+    const day=new Date();
+    day.setDate(day.getDate()-29+i);
+
+    const dateString=day.toLocaleDateString();
+
+    if(dates.includes(dateString)){
+        box.classList.add("active");
+    }
+
+    tracker.appendChild(box);
+}
+const video = document.getElementById("camera");
+
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    video.srcObject = stream;
+  })
+  .catch(error => {
+    console.error("Camera access denied:", error);
+  });
+</script>

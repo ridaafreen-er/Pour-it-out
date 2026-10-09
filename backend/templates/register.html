@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <section>
+        
+        <div class="navbar">
+            <div class="logo">
+                <h1>📔 My Journal</h1>
+            </div>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+
+    </section>
+    <section>
+        <div class="registerFormm" >
+            <h2>REGISTER</h2>
+            <form id="registerForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your username">
+                <br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <br>
+                <button type="submit" >Register</button>
+        </div>
+    </section>
+    <div id="message">
+        <h4>Already registered?</h4><h4><a href="login.html">Login here</a></h4>
+    </div>
+    
+</body>
+</html>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #652972, #9b5c91,#bc258f);
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    backdrop-filter: blur(30px);
+}
+
+
+
+</style>

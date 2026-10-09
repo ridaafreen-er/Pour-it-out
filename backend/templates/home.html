@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <section>
+        <div class="navbar">
+            <div class="logo">
+                <h1>📔 My Journal</h1>
+            </div>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+
+    </section>
+    <section class="homeSection">
+        <div class="homeContent">
+            <h2 class="h2">WELCOME TO MY JOURNAL</h2>
+            <p>Your personal space to jot down thoughts, feelings, and daily experiences. Start your journaling journey today!</p>
+            <button onclick="window.location.href='register.html'">REGISTER NOW</button>
+        </div>
+    </section>
+</body>
