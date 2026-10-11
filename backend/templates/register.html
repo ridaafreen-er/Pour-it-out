@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account — My Journal</title>
+    <title>Register — My Journal</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Stylesheets: supports both Flask and Live Server -->
@@ -21,11 +21,11 @@
 </head>
 <body>
 
-    <!-- Frosted Navbar -->
+    <!-- Retro Navbar -->
     <header class="navbar">
         <div class="logo">
             <a href="home.html" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-                <h1>📔 My Journal</h1>
+                <h1>💻 My_Journal.exe</h1>
             </a>
         </div>
         <ul>
@@ -34,60 +34,76 @@
             <li><a href="login.html"><i class="bi bi-box-arrow-in-right"></i> Sign In</a></li>
             <li><a href="register.html" class="active"><i class="bi bi-person-plus"></i> Register</a></li>
         </ul>
-        <button class="btn-theme-toggle" style="background:var(--surface-inner);border:1px solid var(--border-subtle);color:var(--text-secondary);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" title="Toggle Dark/Light Mode">
+        <button class="btn-theme-toggle window-btn" style="width:28px;height:28px;font-size:14px;" title="Toggle Dark/Light Mode">
             <i class="bi bi-sun-fill"></i>
         </button>
     </header>
 
-    <!-- Main Auth Card Container -->
+    <!-- Main Auth Area -->
     <main class="auth-container">
-        <div class="auth-ambient-orb"></div>
-
-        <div class="registerFormm">
-            <h2>Create Account</h2>
-            <p class="auth-subtitle">Join thousands cultivating daily self-reflection</p>
-
-            <form id="registerForm">
-                <div class="form-field-group">
-                    <label for="username">Username</label>
-                    <div class="input-with-icon">
-                        <i class="bi bi-person field-icon"></i>
-                        <input type="text" id="username" name="username" placeholder="Choose a username" required autofocus>
-                    </div>
+        
+        <!-- Floating Retro Modal Window -->
+        <div class="retro-window auth-window antigravity-float">
+            
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span class="pixel-icon">📝</span>
+                    <span>register.exe - [New User Setup]</span>
                 </div>
-
-                <div class="form-field-group">
-                    <label for="email">Email Address <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-                    <div class="input-with-icon">
-                        <i class="bi bi-envelope field-icon"></i>
-                        <input type="email" id="email" name="email" placeholder="name@example.com">
-                    </div>
+                <div class="window-controls">
+                    <button class="window-btn" onclick="window.location.href='home.html'" title="Home">⌂</button>
+                    <button class="window-btn" title="Minimize">—</button>
+                    <button class="window-btn" title="Close">✕</button>
                 </div>
-
-                <div class="form-field-group">
-                    <label for="password">Password</label>
-                    <div class="input-with-icon">
-                        <i class="bi bi-shield-lock field-icon"></i>
-                        <input type="password" id="password" name="password" placeholder="Create a secure password" required>
-                        <button type="button" class="btn-toggle-pwd" title="Show or hide password">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit-auth">
-                    Register Account <i class="bi bi-arrow-right"></i>
-                </button>
-            </form>
-
-            <div id="message">
-                <h4>Already registered?</h4>
-                <h4><a href="login.html">Sign in here</a></h4>
             </div>
+
+            <div class="window-menubar">
+                <span class="menu-item">System</span>
+                <span class="menu-item">Setup</span>
+                <span class="menu-item">Help</span>
+            </div>
+
+            <div class="window-body" style="padding:2.25rem 2rem;">
+                <h2 class="auth-form-title">CREATE ACCOUNT</h2>
+                <p class="auth-form-subtitle">Initialize your private reflection sanctuary</p>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="username">USERNAME:</label>
+                        <input type="text" id="username" name="username" class="retro-input" placeholder="Choose a username" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">EMAIL (OPTIONAL):</label>
+                        <input type="email" id="email" name="email" class="retro-input" placeholder="name@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">PASSWORD:</label>
+                        <div class="input-row-pwd">
+                            <input type="password" id="password" name="password" class="retro-input" placeholder="Create a password" required>
+                            <button type="button" class="btn-toggle-pwd" title="Show or hide password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="retro-btn" style="width:100%; margin-top:0.75rem; padding:10px;">
+                        CREATE PROFILE &rarr;
+                    </button>
+                </form>
+
+                <div id="message">
+                    <span>Already registered? </span>
+                    <a href="login.html">Sign in here</a>
+                </div>
+            </div>
+
         </div>
+
     </main>
 
-    <!-- Footer -->
+    <!-- Retro Footer -->
     <footer class="footer">
         &copy; 2026 <strong>My Journal</strong>. Your thoughts, completely safe and private.
     </footer>

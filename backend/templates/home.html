@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journal — Mindful Space & Voice Reflection</title>
+    <title>My Journal — Retro Pixel Sanctuary</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Stylesheets: supports both Flask and Live Server -->
@@ -23,26 +23,26 @@
 </head>
 <body>
 
-    <!-- Universal Frosted Navbar -->
+    <!-- Retro Pixel Navbar -->
     <header class="navbar">
         <div class="logo">
             <a href="home.html" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-                <h1>📔 My Journal</h1>
+                <h1>💻 My_Journal.exe</h1>
             </a>
         </div>
         <ul>
             <li><a href="home.html" class="active"><i class="bi bi-house-door"></i> Home</a></li>
             <li><a href="#features"><i class="bi bi-stars"></i> Features</a></li>
-            <li><a href="journal.html"><i class="bi bi-journal-text"></i> Open App</a></li>
+            <li><a href="journal.html"><i class="bi bi-journal-text"></i> Open Journal</a></li>
             <li><a href="login.html"><i class="bi bi-box-arrow-in-right"></i> Sign In</a></li>
             <li><a href="register.html"><i class="bi bi-person-plus"></i> Register</a></li>
         </ul>
         <div style="display:flex; align-items:center; gap:0.75rem;">
-            <button class="btn-theme-toggle" style="background:var(--surface-inner);border:1px solid var(--border-subtle);color:var(--text-secondary);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" title="Toggle Dark/Light Mode">
+            <button class="btn-theme-toggle window-btn" style="width:28px;height:28px;font-size:14px;" title="Toggle Dark/Light Mode">
                 <i class="bi bi-sun-fill"></i>
             </button>
-            <a href="journal.html" class="btn-hero-primary" style="padding:0.5rem 1.25rem; font-size:0.9rem; border-radius:9999px;">
-                Write Now &rarr;
+            <a href="journal.html" class="retro-btn" style="padding:6px 14px; font-size:0.78rem;">
+                Launch &rarr;
             </a>
         </div>
     </header>
@@ -51,61 +51,63 @@
     <section class="hero-section">
         <div class="hero-glow-ambient"></div>
 
-        <div class="hero-content">
-            <div class="hero-badge">
-                <i class="bi bi-patch-check-fill"></i> Private & Voice-Powered Sanctuary
+        <div class="hero-header-area">
+            <div class="hero-badge-pixel">
+                <i class="bi bi-stars"></i> AI-Powered Nostalgic Sanctuary
             </div>
             
-            <h1 class="hero-title">
-                Where Your Thoughts Find <br />
-                <span class="gradient-text">Clarity & Peace.</span>
+            <h1 class="hero-main-title">
+                WHERE THOUGHTS FIND <br />
+                <span class="pink-gradient-text">CLARITY & PEACE</span>
             </h1>
 
-            <p class="hero-subtitle">
-                A serene, distraction-free sanctuary designed to articulate your daily experiences. 
-                Speak your thoughts freely with voice-to-text dictation, track your emotional patterns, and build lasting mindfulness habits.
+            <p class="hero-subtitle-text">
+                A serene, distraction-free digital sanctuary styled like a nostalgic desktop window. 
+                Speak reflections with voice-to-text, record your emotional journey, and float through daily mindfulness.
             </p>
-
-            <div class="hero-cta-group">
-                <a href="journal.html" class="btn-hero btn-hero-primary">
-                    Start Journaling Free <i class="bi bi-arrow-right"></i>
-                </a>
-                <a href="login.html" class="btn-hero btn-hero-secondary">
-                    <i class="bi bi-person-circle"></i> Member Login
-                </a>
-            </div>
         </div>
 
-        <!-- Live Preview Mockup Card -->
-        <div class="hero-mockup-wrapper">
-            <div class="mockup-window">
-                <div class="mockup-header-bar">
-                    <div class="mockup-dots">
-                        <span class="mockup-dot red"></span>
-                        <span class="mockup-dot yellow"></span>
-                        <span class="mockup-dot green"></span>
+        <!-- Central Hero Retro Window (Replicating Reference Image with Antigravity Float) -->
+        <div class="hero-window-wrapper">
+            <div class="retro-window hero-retro-window antigravity-float">
+                
+                <!-- Titlebar matching image: icon, 'untitled', controls -->
+                <div class="window-titlebar">
+                    <div class="window-title">
+                        <span class="pixel-icon">💻</span>
+                        <span>untitled - My Journal</span>
                     </div>
-                    <span class="mockup-window-title">My Journal • Active Mindful Session</span>
-                    <span style="font-size: 0.82rem; color: var(--color-primary-light); font-weight: 600;">
-                        <i class="bi bi-shield-check"></i> 100% Private
-                    </span>
+                    <div class="window-controls">
+                        <button class="window-btn" title="Minimize">—</button>
+                        <button class="window-btn" title="Maximize">□</button>
+                        <button class="window-btn" title="Close">✕</button>
+                    </div>
                 </div>
 
-                <div class="mockup-body">
-                    <div class="mockup-entry-header">
-                        <div class="mockup-chip-row">
-                            <span class="mockup-tag">✨ Inspired</span>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Today • 9:42 PM</span>
-                        </div>
-                        <span style="font-size: 0.82rem; color: var(--text-muted);"><i class="bi bi-calendar3"></i> Sunday</span>
+                <!-- Menubar matching image: File Edit View Image -->
+                <div class="window-menubar">
+                    <span class="menu-item">File</span>
+                    <span class="menu-item">Edit</span>
+                    <span class="menu-item">View</span>
+                    <span class="menu-item">Image</span>
+                    <span class="menu-item">Help</span>
+                </div>
+
+                <!-- Window Canvas Body -->
+                <div class="window-body hero-canvas-body">
+                    <div class="canvas-header-row">
+                        <span class="canvas-tag-pixel">✨ Reflection_01.txt</span>
+                        <span class="canvas-date"><i class="bi bi-clock"></i> Sunday • 9:42 PM</span>
                     </div>
 
-                    <p class="mockup-text">
-                        "Took a peaceful evening walk by the lake. The sunset painted the clouds in shades of violet and gold. 
+                    <h2 class="canvas-lead-title">WELCOME TO MY JOURNAL</h2>
+                    <p class="canvas-body-text">
+                        "Took a peaceful evening walk by the lake. The sunset painted the clouds in shades of violet and dusty rose. 
                         Realized that true clarity doesn't come from forcing answers—it gently unfolds when you quiet the noise."
                     </p>
 
-                    <div class="mockup-voice-bar">
+                    <!-- Voice dictation wave animation bar -->
+                    <div class="canvas-voice-bar">
                         <div class="voice-wave-anim">
                             <span class="voice-wave-bar"></span>
                             <span class="voice-wave-bar"></span>
@@ -113,105 +115,161 @@
                             <span class="voice-wave-bar"></span>
                             <span class="voice-wave-bar"></span>
                         </div>
-                        <span class="mockup-voice-label">
-                            <i class="bi bi-mic-fill" style="color: var(--color-secondary);"></i> Voice Dictation Active • Real-time Speech Transcription
+                        <span class="canvas-voice-label">
+                            <i class="bi bi-mic-fill" style="color:#d46f9f;"></i> Voice Dictation Active • Real-Time Speech Transcription
                         </span>
                     </div>
+
+                    <!-- Action buttons -->
+                    <div class="canvas-action-row">
+                        <a href="journal.html" class="retro-btn">
+                            START JOURNALING NOW &rarr;
+                        </a>
+                        <a href="login.html" class="retro-btn retro-btn-secondary">
+                            MEMBER LOGIN
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Ribbon with Staggered Antigravity Delays -->
+    <section class="stats-strip-area">
+        <div class="stats-grid">
+            
+            <div class="retro-window stat-window antigravity-float antigravity-delay-1">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🔒</span> security.log</div>
+                    <div class="window-controls"><button class="window-btn">—</button></div>
+                </div>
+                <div class="window-body" style="padding:1.25rem;">
+                    <div class="stat-number-pixel">100%</div>
+                    <div class="stat-label-pixel">Private & Locally Accessible</div>
                 </div>
             </div>
+
+            <div class="retro-window stat-window antigravity-float antigravity-delay-2">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🎙️</span> voice_ai.dll</div>
+                    <div class="window-controls"><button class="window-btn">—</button></div>
+                </div>
+                <div class="window-body" style="padding:1.25rem;">
+                    <div class="stat-number-pixel">REALTIME</div>
+                    <div class="stat-label-pixel">Instant Speech-to-Text</div>
+                </div>
+            </div>
+
+            <div class="retro-window stat-window antigravity-float antigravity-delay-3">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🔥</span> streak_35.dat</div>
+                    <div class="window-controls"><button class="window-btn">—</button></div>
+                </div>
+                <div class="window-body" style="padding:1.25rem;">
+                    <div class="stat-number-pixel">35-DAYS</div>
+                    <div class="stat-label-pixel">Pixel Activity Heatmap</div>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- Stats Ribbon -->
-    <section class="stats-ribbon">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">100%</div>
-                <div class="stat-desc">Private & Locally Accessible</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">🎙️ Real-time</div>
-                <div class="stat-desc">Instant Speech-to-Text Dictation</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">🔥 35-Day</div>
-                <div class="stat-desc">Consistency Heatmap & Streaks</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
+    <!-- Bento Retro Features Grid -->
     <section id="features" class="features-section">
-        <div class="section-header">
-            <span class="section-badge">Crafted For Mindfulness</span>
-            <h2>Designed for daily self-discovery</h2>
-            <p>Everything you need to turn scattered daily thoughts into meaningful self-awareness.</p>
+        <div class="features-header-area">
+            <h2>SYSTEM FEATURES & MODULES</h2>
+            <p>Thoughtfully engineered to turn fleeting emotions into daily self-clarity.</p>
         </div>
 
         <div class="features-grid">
+            
             <!-- Feature 1 -->
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="bi bi-mic"></i>
+            <div class="retro-window feature-window antigravity-float antigravity-delay-1">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🎙️</span> voice_recorder.exe</div>
+                    <div class="window-controls"><button class="window-btn">✕</button></div>
                 </div>
-                <h3>Voice-to-Text Dictation</h3>
-                <p>
-                    Don't let fatigue stop you from reflecting. Simply click speak and let your thoughts flow naturally. 
-                    Our speech engine converts spoken words into organized prose instantly.
-                </p>
+                <div class="window-body feature-body">
+                    <div class="feature-icon-badge">🎙️</div>
+                    <h3>Voice-to-Text Dictation</h3>
+                    <p>
+                        Speak your thoughts without typing fatigue. Our browser-powered speech engine transcribes spoken words into organized prose in real time.
+                    </p>
+                </div>
             </div>
 
             <!-- Feature 2 -->
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="bi bi-emoji-smile"></i>
+            <div class="retro-window feature-window antigravity-float antigravity-delay-2">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🎭</span> mood_tracker.sys</div>
+                    <div class="window-controls"><button class="window-btn">✕</button></div>
                 </div>
-                <h3>Emotional Mood Tracking</h3>
-                <p>
-                    Tag every reflection with expressive moods (😊 Happy, 😌 Peaceful, 😐 Neutral, 😔 Down, 😡 Frustrated, 💡 Inspired). 
-                    Gain emotional clarity and monitor your mental wellbeing.
-                </p>
+                <div class="window-body feature-body">
+                    <div class="feature-icon-badge">🎭</div>
+                    <h3>Emotional Mood Tracking</h3>
+                    <p>
+                        Tag each memory with expressive moods (😊 Happy, 😌 Peaceful, 😐 Neutral, 😔 Down, 😡 Frustrated, 💡 Inspired) to uncover emotional patterns.
+                    </p>
+                </div>
             </div>
 
             <!-- Feature 3 -->
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="bi bi-grid-3x3-gap"></i>
+            <div class="retro-window feature-window antigravity-float antigravity-delay-3">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>📊</span> matrix_heatmap.bin</div>
+                    <div class="window-controls"><button class="window-btn">✕</button></div>
                 </div>
-                <h3>Habit Matrix & Streaks</h3>
-                <p>
-                    Inspired by developer contribution graphs, our 35-day interactive activity matrix tracks your reflection consistency. 
-                    Celebrate streaks and cultivate lifelong writing habits.
-                </p>
+                <div class="window-body feature-body">
+                    <div class="feature-icon-badge">📊</div>
+                    <h3>Consistency Matrix & Streaks</h3>
+                    <p>
+                        A 35-day interactive pixel contribution matrix inspired by GitHub activity. Build continuous writing habits and track active streaks.
+                    </p>
+                </div>
             </div>
 
             <!-- Feature 4 -->
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="bi bi-palette"></i>
+            <div class="retro-window feature-window antigravity-float antigravity-delay-1">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>🪐</span> antigravity_fx.css</div>
+                    <div class="window-controls"><button class="window-btn">✕</button></div>
                 </div>
-                <h3>Twilight Purple Aesthetics</h3>
-                <p>
-                    Immerse yourself in our signature Deep Twilight Purple theme for calming evening reflections or switch to Lavender Light for morning clarity.
-                </p>
+                <div class="window-body feature-body">
+                    <div class="feature-icon-badge">🪐</div>
+                    <h3>Antigravity Floating Physics</h3>
+                    <p>
+                        Weightless, floating window animations that gently drift with staggered levitation, reactive hover states, and nostalgic retro pink/plum charm.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Call to Action Banner Window -->
+    <section class="cta-area">
+        <div class="retro-window antigravity-float">
+            <div class="window-titlebar">
+                <div class="window-title"><span>✨</span> start_journaling.dialog</div>
+                <div class="window-controls">
+                    <button class="window-btn">—</button>
+                    <button class="window-btn">✕</button>
+                </div>
+            </div>
+            <div class="window-body cta-window-body">
+                <h2>Ready to write your first reflection?</h2>
+                <p>Open your personal space where daily thoughts turn into lifelong wisdom.</p>
+                <a href="journal.html" class="retro-btn" style="padding:10px 24px;">
+                    LAUNCH MY JOURNAL NOW &rarr;
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action Banner -->
-    <section class="cta-banner-section">
-        <div class="cta-banner">
-            <h2>Begin Your Reflection Journey Today</h2>
-            <p>Experience the tranquil space where your daily thoughts turn into lifelong wisdom.</p>
-            <a href="journal.html" class="btn-hero btn-hero-primary" style="padding: 0.9rem 2.4rem;">
-                Launch My Journal Now &rarr;
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
+    <!-- Retro Footer -->
     <footer class="footer">
-        &copy; 2026 <strong>My Journal</strong>. Your personal sanctuary for mindful reflections.
+        &copy; 2026 <strong>My Journal</strong>. Built with nostalgic pixel love & antigravity physics.
     </footer>
 
 </body>

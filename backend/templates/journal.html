@@ -8,7 +8,7 @@
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Stylesheets: supports both Flask and Live Server -->
@@ -21,10 +21,10 @@
 </head>
 <body>
 
-    <!-- Sidebar Navigation Drawer -->
+    <!-- Retro Sidebar Drawer -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3>📔 My Journal</h3>
+            <h3 style="font-family:var(--retro-font); color:#f7d2e4;">💻 My_Journal.exe</h3>
             <button class="close-sidebar-btn" onclick="toggleNav()">&times;</button>
         </div>
         <a href="home.html"><i class="bi bi-house-door"></i> Home</a>
@@ -32,392 +32,230 @@
         <a href="login.html"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </div>
 
-    <!-- Top Action Bar -->
+    <!-- Top Action Desktop Taskbar -->
     <div class="top-nav-bar">
-        <button class="menu-btn" onclick="toggleNav()" title="Open Navigation Menu">
-            <i class="bi bi-list"></i> Menu
+        <button class="retro-btn" onclick="toggleNav()" style="padding:4px 10px; font-size:0.75rem;" title="Open Menu">
+            <i class="bi bi-list"></i> Start
         </button>
         <div class="date-badge" id="liveDateBadge">
             <i class="bi bi-calendar3"></i> <span id="currentDateText">Today</span>
         </div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-            <i class="bi bi-moon-stars" id="themeIcon"></i>
+        <button class="retro-btn btn-theme-toggle" onclick="toggleTheme()" style="padding:4px 10px; font-size:0.75rem;" title="Toggle Dark/Light Mode">
+            <i class="bi bi-moon-stars" id="themeIcon"></i> Theme
         </button>
     </div>
 
-    <!-- Main Journal Container -->
-    <div class="app">
-        <header class="header">
-            <h1>📔 My Journal</h1>
-            <p>Speak or write your thoughts. Unwind in a quiet space.</p>
+    <!-- Main Container -->
+    <div class="journal-desktop-area" style="width:100%; max-width:740px; margin:0 auto 3rem; padding:0 1rem;">
+        
+        <!-- Primary Composer Retro Window (Matches Image with Antigravity Float) -->
+        <div class="retro-window antigravity-float" style="margin-bottom: 2.5rem;">
             
-            <div class="header-tools">
-                <button class="Home" onclick="window.location.href='home.html'" title="Return to Home">
-                    <i class="bi bi-house-door"></i>
-                </button>
-                <div class="search-wrapper">
-                    <i class="bi bi-search search-icon-inside"></i>
-                    <input type="text" id="searchInput" placeholder="Search entries..." oninput="searchEntries()" />
+            <!-- Window Titlebar -->
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span class="pixel-icon">💻</span>
+                    <span>my_journal.txt - [Write]</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-btn" onclick="window.location.href='home.html'" title="Home">⌂</button>
+                    <button class="window-btn" title="Minimize">—</button>
+                    <button class="window-btn" title="Maximize">□</button>
+                    <button class="window-btn" title="Close">✕</button>
                 </div>
             </div>
-        </header>
 
-        <!-- Prompt suggestion banner -->
-        <div class="prompt-chip" id="promptChip" onclick="cyclePrompt()" title="Click to cycle mindfulness prompts">
-            <i class="bi bi-lightbulb-fill" style="color:var(--color-amber);"></i>
-            <span id="promptText">Prompt: What made you smile or feel grateful today? 🌟</span>
+            <!-- Window Menubar -->
+            <div class="window-menubar">
+                <span class="menu-item" onclick="document.getElementById('entry').focus()">File</span>
+                <span class="menu-item" onclick="clearEntry()">Clear</span>
+                <span class="menu-item" onclick="cyclePrompt()">Prompt</span>
+                <span class="menu-item" onclick="startRecording()">Dictate</span>
+                <span class="menu-item">Help</span>
+            </div>
+
+            <!-- Window Body -->
+            <div class="window-body">
+                
+                <!-- Prompt Chip -->
+                <div class="prompt-chip-retro" id="promptChip" onclick="cyclePrompt()" title="Click to cycle prompts">
+                    <span style="font-family:var(--retro-font); font-size:0.78rem; color:#853768;">
+                        <i class="bi bi-lightbulb-fill" style="color:#d46f9f;"></i> <span id="promptText">PROMPT: What made you smile or feel grateful today? 🌟</span>
+                    </span>
+                </div>
+
+                <!-- Form -->
+                <form id="journalForm">
+                    <div style="position:relative; margin-bottom: 1rem;">
+                        <textarea 
+                            id="entry" 
+                            class="retro-textarea" 
+                            placeholder="How was your day? Speak your heart or write your thoughts freely... 🌙" 
+                            required
+                        ></textarea>
+                        
+                        <div class="counter-row">
+                            <span id="charCount">0 chars</span>
+                            <span id="wordCount">0 words</span>
+                        </div>
+                    </div>
+
+                    <!-- Mood Selector Row -->
+                    <div class="composer-subrow" style="margin-bottom: 1.25rem;">
+                        <span class="mood-label-pixel">MOOD:</span>
+                        <div class="moods-retro">
+                            <button type="button" class="mood-btn active" onclick="setMood('😊', this)" title="Happy">😊</button>
+                            <button type="button" class="mood-btn" onclick="setMood('😌', this)" title="Peaceful">😌</button>
+                            <button type="button" class="mood-btn" onclick="setMood('😐', this)" title="Neutral">😐</button>
+                            <button type="button" class="mood-btn" onclick="setMood('😔', this)" title="Down">😔</button>
+                            <button type="button" class="mood-btn" onclick="setMood('😡', this)" title="Frustrated">😡</button>
+                            <button type="button" class="mood-btn" onclick="setMood('💡', this)" title="Inspired">💡</button>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="actions-row">
+                        <button type="button" class="retro-btn" id="speakBtn" onclick="startRecording()" style="flex:1;">
+                            <i class="bi bi-mic-fill"></i> DICTATE (VOICE)
+                        </button>
+                        <button type="submit" class="retro-btn" style="flex:1; background:linear-gradient(to bottom, #faa3cb, #e27cb1); border-color:#fff #66264e #66264e #fff;">
+                            <i class="bi bi-plus-circle-fill"></i> SAVE REFLECTION
+                        </button>
+                    </div>
+                </form>
+
+            </div>
         </div>
 
-        <!-- Journal Composer Form -->
-        <form id="journalForm" class="journal-form">
-            <div class="textarea-container">
-                <textarea 
-                    id="entry" 
-                    placeholder="How was your day? Speak your heart or write your thoughts freely... 🌙" 
-                    required
-                ></textarea>
-                <div class="word-counter-row">
-                    <span id="charCount">0 chars</span>
-                    <span id="wordCount">0 words</span>
-                </div>
-            </div>
-
-            <div class="composer-subrow">
-                <div class="mood-label">Current Mood:</div>
-                <div class="moods">
-                    <span class="mood-item active" onclick="setMood('😊')" title="Happy">😊</span>
-                    <span class="mood-item" onclick="setMood('😌')" title="Peaceful">😌</span>
-                    <span class="mood-item" onclick="setMood('😐')" title="Neutral">😐</span>
-                    <span class="mood-item" onclick="setMood('😔')" title="Down">😔</span>
-                    <span class="mood-item" onclick="setMood('😡')" title="Frustrated">😡</span>
-                    <span class="mood-item" onclick="setMood('💡')" title="Inspired">💡</span>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button type="button" class="btn-action btn-speak" id="speakBtn" onclick="startRecording()" title="Speak using microphone">
-                    <i class="bi bi-mic-fill"></i> Speak
-                </button>
-                <button type="submit" class="btn-action btn-add" title="Save entry (Ctrl+Enter)">
-                    <i class="bi bi-plus-circle-fill"></i> Add Reflection
-                </button>
-            </div>
-        </form>
-
-        <!-- Previous Entries Timeline -->
-        <section class="entries-section">
-            <div class="entries-header-row">
-                <h2>Previous Reflections</h2>
-                <span class="entry-count-pill" id="entryCountPill">0 Reflections</span>
-            </div>
-
-            <!-- Mood Filter Chips -->
-            <div class="mood-filter-scroll">
-                <button type="button" class="filter-chip active" onclick="filterByMood('all', this)">All</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('😊', this)">😊 Happy</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('😌', this)">😌 Peaceful</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('😐', this)">😐 Neutral</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('😔', this)">😔 Down</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('😡', this)">😡 Frustrated</button>
-                <button type="button" class="filter-chip" onclick="filterByMood('💡', this)">💡 Inspired</button>
-            </div>
-
-            <div id="journalCards"></div>
+        <!-- Previous Entries Timeline with Staggered Antigravity Floating Windows -->
+        <section class="entries-section" style="margin-bottom: 2.5rem;">
             
-            <!-- Empty state fallback -->
-            <div id="noEntriesMessage" class="empty-entries" style="display: none;">
-                <p>✨ No reflections found. Type your thoughts above or tap <strong>Speak</strong> to record your day!</p>
+            <div class="entries-nav-bar">
+                <h2 style="font-family:var(--retro-font); font-size:1.15rem; color:#fad6e6; margin:0; text-shadow:1px 1px 0px #4d1c44;">
+                    PREVIOUS REFLECTIONS
+                </h2>
+                <span class="pixel-pill" id="entryCountPill">0 ENTRIES</span>
+            </div>
+
+            <!-- Search input bar -->
+            <div class="retro-search-bar" style="margin-bottom: 1rem;">
+                <span style="font-family:var(--retro-font); font-size:0.8rem; color:#ffd6ea;"><i class="bi bi-search"></i> SEARCH:</span>
+                <input type="text" id="searchInput" class="retro-input" placeholder="Type keywords..." oninput="searchEntries()" style="padding:0.45rem 0.75rem; font-size:0.85rem;" />
+            </div>
+
+            <!-- Mood filter chips -->
+            <div class="mood-filters-row" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:1.25rem;">
+                <button type="button" class="retro-filter-chip active" onclick="filterByMood('all', this)">ALL</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('😊', this)">😊 HAPPY</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('😌', this)">😌 PEACE</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('😐', this)">😐 NEUTRAL</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('😔', this)">😔 DOWN</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('😡', this)">😡 MAD</button>
+                <button type="button" class="retro-filter-chip" onclick="filterByMood('💡', this)">💡 INSPIRED</button>
+            </div>
+
+            <!-- Container for floating reflection mini-windows -->
+            <div id="journalCards" class="floating-cards-feed"></div>
+
+            <!-- Empty state -->
+            <div id="noEntriesMessage" class="retro-window" style="display:none; text-align:center;">
+                <div class="window-titlebar">
+                    <div class="window-title"><span>📂</span> empty_archive.log</div>
+                </div>
+                <div class="window-body" style="padding:2rem;">
+                    <p style="font-family:var(--retro-font); font-size:0.85rem; color:#7e366e; margin:0;">
+                        No reflections found. Write your first thought above or click DICTATE!
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Consistency Matrix Activity Heatmap -->
+        <section class="retro-window antigravity-float antigravity-delay-2">
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span>🔥</span>
+                    <span>consistency_matrix.exe - 35 Days</span>
+                </div>
+                <span class="pixel-pill" id="streakPill" style="background:#fef08a; border-color:#854d0e; color:#713f12; font-size:0.75rem;">
+                    0 DAY STREAK
+                </span>
+            </div>
+            <div class="window-body" style="padding:1.5rem;">
+                <p style="font-family:var(--retro-font); font-size:0.78rem; color:#853768; margin-bottom:1rem;">
+                    Daily Activity Heatmap (Level of reflections logged):
+                </p>
+                <div id="tracker" class="retro-pixel-grid"></div>
             </div>
         </section>
 
-        <!-- Consistency Activity Matrix -->
-        <section class="journalentrytracker">
-            <div class="tracker-header">
-                <h2>Consistency Matrix</h2>
-                <span class="streak-pill" id="streakPill"><i class="bi bi-fire"></i> 0 Day Streak</span>
-            </div>
-            <p class="tracker-desc">Past 35 days of daily reflection</p>
-            <div id="tracker"></div>
-        </section>
     </div>
 
-    <!-- Embedded Professional Styling for complete independence & reliability -->
+    <!-- Embedded Retro Specific Styles -->
     <style>
-        /* Top Action Bar */
         .top-nav-bar {
             width: 100%;
-            max-width: 680px;
+            max-width: 740px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 1rem auto;
-            padding: 0 0.5rem;
-        }
-
-        .menu-btn, .theme-toggle-btn {
-            background: var(--surface-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-medium);
-            color: var(--text-main);
-            padding: 0.5rem 1.15rem;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            font-size: 0.92rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            transition: var(--transition);
-        }
-
-        .menu-btn:hover, .theme-toggle-btn:hover {
-            background: rgba(168, 85, 247, 0.25);
-            border-color: #d946ef;
-            transform: translateY(-1px);
+            padding: 0 1rem;
         }
 
         .date-badge {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-lavender);
-            background: var(--surface-inner);
-            padding: 0.45rem 1.1rem;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-subtle);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
+            font-family: var(--retro-font);
+            font-size: 0.8rem;
+            color: #fad6e6;
+            background: rgba(36, 14, 46, 0.7);
+            border: 2px solid #7c3f6f;
+            padding: 0.35rem 0.85rem;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 0;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: rgba(16, 8, 28, 0.96);
-            backdrop-filter: blur(24px);
-            border-right: 1px solid var(--border-medium);
-            overflow-x: hidden;
-            transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            padding-top: 2rem;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 10px 0 35px rgba(0, 0, 0, 0.5);
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1.5rem 1.5rem;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-header h3 {
-            font-size: 1.25rem;
-            font-family: 'Outfit', sans-serif;
-            color: #ffffff;
-        }
-
-        .close-sidebar-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.8rem;
+        .prompt-chip-retro {
+            background: #fdf2f8;
+            border: 1.5px dashed #cf7da7;
+            padding: 0.45rem 0.85rem;
+            margin-bottom: 0.85rem;
             cursor: pointer;
-            line-height: 1;
+            transition: background 0.15s ease;
         }
 
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            padding: 0.9rem 1.5rem;
-            font-size: 1.05rem;
-            font-weight: 500;
-            transition: var(--transition);
+        .prompt-chip-retro:hover {
+            background: #fce7f3;
         }
 
-        .sidebar a:hover, .sidebar a.active {
-            color: #ffffff;
-            background: rgba(168, 85, 247, 0.2);
-            border-left: 4px solid #d946ef;
-        }
-
-        /* App Container */
-        .app {
-            width: 100%;
-            max-width: 680px;
-            margin: 0 auto 3rem;
-            background: var(--surface-card);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--radius-lg);
-            padding: 2.25rem;
-            box-shadow: var(--shadow-lg);
-            animation: fadeIn 0.4s ease;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .header h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.15rem;
-            font-weight: 800;
-            margin-bottom: 0.35rem;
-            background: linear-gradient(135deg, #ffffff 40%, var(--text-lavender) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        [data-theme="light"] .header h1, body.light-mode .header h1 {
-            background: linear-gradient(135deg, #180f2b 40%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 0.98rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .header-tools {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-        }
-
-        .Home {
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-md);
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.15rem;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-
-        .Home:hover {
-            border-color: #a855f7;
-            background: rgba(168, 85, 247, 0.2);
-            transform: scale(1.05);
-        }
-
-        .search-wrapper {
-            position: relative;
-            flex: 1;
-        }
-
-        .search-icon-inside {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-            font-size: 0.95rem;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.6rem;
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-full);
-            color: var(--text-main);
-            font-family: inherit;
-            font-size: 0.92rem;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        #searchInput:focus {
-            border-color: #a855f7;
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
-        }
-
-        /* Prompt Suggestion Chip */
-        .prompt-chip {
-            background: var(--grad-badge);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--radius-full);
-            padding: 0.5rem 1.1rem;
-            font-size: 0.86rem;
-            color: var(--text-lavender);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            margin-bottom: 1.25rem;
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .prompt-chip, body.light-mode .prompt-chip {
-            color: var(--color-primary);
-        }
-
-        .prompt-chip:hover {
-            background: rgba(168, 85, 247, 0.25);
-            transform: translateY(-1px);
-        }
-
-        /* Form */
-        .journal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .textarea-container {
-            position: relative;
-        }
-
-        .journal-form textarea {
+        .retro-textarea {
             width: 100%;
             min-height: 140px;
-            padding: 1.15rem;
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            color: var(--text-main);
-            font-family: inherit;
+            padding: 1rem;
+            background: #faf4f8;
+            border: 2px solid;
+            border-color: #8c577b #fff #fff #8c577b;
+            color: #2b1129;
+            font-family: var(--body-font);
             font-size: 1rem;
             line-height: 1.65;
-            resize: vertical;
             outline: none;
-            transition: var(--transition);
+            resize: vertical;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
         }
 
-        .journal-form textarea:focus {
-            border-color: #a855f7;
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
+        .retro-textarea:focus {
+            background: #ffffff;
+            border-color: #d46f9f;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.06), 0 0 0 2px rgba(219, 140, 181, 0.4);
         }
 
-        .word-counter-row {
+        .counter-row {
             display: flex;
             justify-content: flex-end;
             gap: 0.75rem;
-            font-size: 0.78rem;
-            color: var(--text-muted);
+            font-family: var(--retro-font);
+            font-size: 0.75rem;
+            color: #8f537b;
             margin-top: 0.35rem;
         }
 
@@ -429,328 +267,185 @@
             gap: 0.75rem;
         }
 
-        .mood-label {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-muted);
+        .mood-label-pixel {
+            font-family: var(--retro-font);
+            font-size: 0.82rem;
+            color: #4d2349;
+            font-weight: 700;
         }
 
-        .moods {
+        .moods-retro {
             display: flex;
-            gap: 0.65rem;
-            font-size: 1.35rem;
-            cursor: pointer;
+            gap: 6px;
         }
 
-        .mood-item {
+        .mood-btn {
+            width: 36px;
+            height: 36px;
+            background: #fce7f3;
+            border: 2px solid;
+            border-color: #fff #9d5a82 #9d5a82 #fff;
+            font-size: 1.15rem;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            user-select: none;
+            transition: transform 0.15s ease;
         }
 
-        .mood-item:hover {
-            transform: scale(1.22);
-            border-color: #a855f7;
+        .mood-btn:hover {
+            transform: scale(1.18);
+            background: #fbcfe8;
         }
 
-        .mood-item.active {
-            border-color: #d946ef;
-            background: rgba(217, 70, 239, 0.25);
-            box-shadow: 0 0 14px rgba(217, 70, 239, 0.45);
-            transform: scale(1.15);
+        .mood-btn.active {
+            background: #db8cb5;
+            border-color: #803f67 #fff #fff #803f67;
+            transform: scale(1.1);
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.25);
         }
 
-        /* Action Buttons */
-        .actions {
+        .actions-row {
             display: flex;
             gap: 0.85rem;
-            margin-top: 0.35rem;
+            margin-top: 0.5rem;
         }
 
-        .btn-action {
-            flex: 1;
-            padding: 0.85rem;
-            border-radius: var(--radius-full);
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.98rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: var(--transition);
+        /* Dictation Pulse */
+        #speakBtn.recording {
+            background: linear-gradient(to bottom, #fca5a5, #ef4444) !important;
+            color: #ffffff !important;
+            animation: pulseRec 1s infinite alternate;
         }
 
-        .btn-speak {
-            background: var(--surface-inner);
-            border: 1px solid var(--border-medium);
-            color: var(--text-main);
+        @keyframes pulseRec {
+            from { box-shadow: 0 0 4px #ef4444; }
+            to { box-shadow: 0 0 16px #ef4444; }
         }
 
-        .btn-speak:hover {
-            background: rgba(168, 85, 247, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .btn-speak.recording {
-            background: rgba(239, 68, 68, 0.25);
-            border-color: #ef4444;
-            color: #fca5a5;
-            animation: pulseRecord 1.5s infinite;
-        }
-
-        @keyframes pulseRecord {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .btn-add {
-            background: var(--grad-primary);
-            color: #ffffff;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-        }
-
-        .btn-add:hover {
-            background: var(--grad-primary-hover);
-            box-shadow: 0 6px 26px rgba(168, 85, 247, 0.55);
-            transform: translateY(-2px);
-        }
-
-        /* Entries Section */
-        .entries-section {
-            margin-top: 2rem;
-            padding-top: 1.75rem;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .entries-header-row {
+        .entries-nav-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .entries-section h2 {
-            font-family: 'Outfit', sans-serif;
-            color: var(--text-main);
-            font-size: 1.35rem;
-            font-weight: 700;
-        }
-
-        .entry-count-pill {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: var(--surface-inner);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-subtle);
-        }
-
-        /* Mood filter scroll */
-        .mood-filter-scroll {
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            padding-bottom: 0.85rem;
             margin-bottom: 0.85rem;
-            scrollbar-width: thin;
         }
 
-        .filter-chip {
-            padding: 0.35rem 0.85rem;
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-full);
-            font-size: 0.82rem;
-            color: var(--text-secondary);
+        .pixel-pill {
+            font-family: var(--retro-font);
+            font-size: 0.78rem;
+            background: #db8cb5;
+            border: 2px solid;
+            border-color: #fff #844770 #844770 #fff;
+            color: #4a2146;
+            padding: 2px 8px;
+        }
+
+        .retro-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .retro-filter-chip {
+            background: #ebd5e4;
+            border: 1.5px solid;
+            border-color: #fff #6c4060 #6c4060 #fff;
+            color: #4b2643;
+            font-family: var(--retro-font);
+            font-size: 0.72rem;
+            padding: 3px 10px;
             cursor: pointer;
-            transition: var(--transition);
             white-space: nowrap;
         }
 
-        .filter-chip:hover {
-            border-color: var(--border-medium);
-            color: var(--text-main);
-        }
-
-        .filter-chip.active {
-            background: var(--grad-badge);
-            border-color: var(--color-primary);
+        .retro-filter-chip.active {
+            background: #db8cb5;
             color: #ffffff;
-            font-weight: 600;
+            border-color: #844770 #fff #fff #844770;
+            text-shadow: 1px 1px 0px #5c2752;
         }
 
-        .entry-card {
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 1.15rem;
-            margin-bottom: 1rem;
-            position: relative;
-            animation: slideUp 0.35s ease;
-            transition: var(--transition);
+        /* Floating Entries Feed */
+        .floating-cards-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .entry-window-card {
+            width: 100%;
         }
 
-        .entry-card:hover {
-            border-color: var(--border-medium);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        .entry-window-body {
+            padding: 1.25rem 1.4rem;
         }
 
-        .entry-card p {
-            margin: 0;
-            font-size: 0.98rem;
-            color: var(--text-main);
-            line-height: 1.6;
+        .entry-window-text {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #2b1129;
             white-space: pre-wrap;
             word-break: break-word;
+            margin-bottom: 0.85rem;
         }
 
-        .entry-footer-row {
+        .entry-window-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 0.75rem;
+            border-top: 1px dashed #e8c6da;
             padding-top: 0.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .entry-card small {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+        .entry-meta-stamp {
+            font-family: var(--retro-font);
+            font-size: 0.75rem;
+            color: #793769;
         }
 
-        .entry-card-actions {
-            display: flex;
-            gap: 0.35rem;
-        }
-
-        .action-icon-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 0.95rem;
-            padding: 0.25rem;
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        .action-icon-btn:hover {
-            color: var(--text-main);
-        }
-
-        .action-icon-btn.delete-btn:hover {
-            color: #ef4444;
-        }
-
-        .empty-entries {
-            text-align: center;
-            padding: 2.5rem 1.5rem;
-            background: var(--surface-inner);
-            border: 1px dashed var(--border-medium);
-            border-radius: 16px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Tracker Section */
-        .journalentrytracker {
-            margin-top: 2.25rem;
-            padding: 1.75rem;
-            background: var(--surface-inner);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-        }
-
-        .tracker-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.35rem;
-        }
-
-        .journalentrytracker h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            color: var(--text-main);
-        }
-
-        .tracker-desc {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .streak-pill {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-full);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-
-        #tracker {
+        /* 35-Day Pixel Grid */
+        .retro-pixel-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 8px;
         }
 
-        .box {
+        .pixel-box {
             aspect-ratio: 1;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: #f7e8f1;
+            border: 1.5px solid;
+            border-color: #8c577b #fff #fff #8c577b;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.15s ease;
         }
 
-        .box:hover {
-            transform: scale(1.18);
-            border-color: #a855f7;
-            z-index: 5;
+        .pixel-box:hover {
+            transform: scale(1.25);
+            background: #fbcfe8;
+            z-index: 10;
         }
 
-        .box.active {
-            background: linear-gradient(135deg, #7c3aed, #d946ef);
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.45);
-            border-color: rgba(217, 70, 239, 0.6);
+        .pixel-box.active-1 {
+            background: #e9a3c7;
+        }
+
+        .pixel-box.active-2 {
+            background: #d46f9f;
+        }
+
+        .pixel-box.active-3 {
+            background: #a83873;
+            box-shadow: 0 0 6px #db8cb5;
         }
 
         @media (max-width: 600px) {
-            .app { padding: 1.5rem 1.2rem; }
-            .header h1 { font-size: 1.75rem; }
-            .actions { flex-direction: column; }
+            .actions-row { flex-direction: column; }
+            .moods-retro { flex-wrap: wrap; }
         }
     </style>
 
-    <!-- Embedded Scripts for complete functionality & fallback -->
+    <!-- Embedded Scripts for Full Self-Contained Reliability -->
     <script>
-        // State
         let selectedMood = "😊";
         let speechRecognition = null;
         let isRecording = false;
@@ -806,17 +501,26 @@
             document.getElementById("wordCount").textContent = `${words} words`;
         }
 
+        function clearEntry() {
+            const entryArea = document.getElementById("entry");
+            if (entryArea && entryArea.value.trim()) {
+                if (confirm("Clear current reflection draft?")) {
+                    entryArea.value = "";
+                    updateCounter();
+                }
+            }
+        }
+
         function cyclePrompt() {
             promptIndex = (promptIndex + 1) % PROMPTS.length;
             const next = PROMPTS[promptIndex];
-            document.getElementById("promptText").textContent = `Prompt: ${next}`;
+            document.getElementById("promptText").textContent = `PROMPT: ${next}`;
             const entryArea = document.getElementById("entry");
             if (entryArea && !entryArea.value.trim()) {
                 entryArea.placeholder = next;
             }
         }
 
-        // Toggle Sidebar
         function toggleNav() {
             let sidebar = document.getElementById("sidebar");
             if (sidebar.style.width === "240px") {
@@ -826,7 +530,6 @@
             }
         }
 
-        // Toggle Dark/Light Theme
         function toggleTheme() {
             document.body.classList.toggle("light-mode");
             const isLight = document.body.classList.contains("light-mode");
@@ -837,26 +540,20 @@
             }
         }
 
-        // Mood Selection
-        function setMood(mood) {
+        function setMood(mood, btn) {
             selectedMood = mood;
-            document.querySelectorAll(".mood-item").forEach(item => {
-                if (item.textContent.trim() === mood) {
-                    item.classList.add("active");
-                } else {
-                    item.classList.remove("active");
-                }
-            });
+            document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("active"));
+            if (btn) btn.classList.add("active");
         }
 
-        function filterByMood(mood, chip) {
+        function filterByMood(mood, btn) {
             currentFilter = mood;
-            document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-            chip.classList.add("active");
+            document.querySelectorAll(".retro-filter-chip").forEach(c => c.classList.remove("active"));
+            if (btn) btn.classList.add("active");
             searchEntries();
         }
 
-        // Speech-to-Text
+        // Voice Dictation
         function startRecording() {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
             const speakBtn = document.getElementById("speakBtn");
@@ -870,7 +567,7 @@
                 if (speechRecognition) speechRecognition.stop();
                 isRecording = false;
                 speakBtn.classList.remove("recording");
-                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> Speak';
+                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
                 return;
             }
 
@@ -882,7 +579,7 @@
             speechRecognition.onstart = () => {
                 isRecording = true;
                 speakBtn.classList.add("recording");
-                speakBtn.innerHTML = '<i class="bi bi-soundwave"></i> Listening...';
+                speakBtn.innerHTML = '<i class="bi bi-record-circle-fill"></i> RECORDING...';
             };
 
             speechRecognition.onresult = (e) => {
@@ -903,13 +600,13 @@
                 console.warn("Speech error:", e.error);
                 isRecording = false;
                 speakBtn.classList.remove("recording");
-                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> Speak';
+                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
             };
 
             speechRecognition.onend = () => {
                 isRecording = false;
                 speakBtn.classList.remove("recording");
-                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> Speak';
+                speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
             };
 
             try {
@@ -919,14 +616,14 @@
             }
         }
 
-        // Search and filter entries
+        // Search & Filter
         function searchEntries() {
             const term = (document.getElementById("searchInput").value || "").toLowerCase().trim();
-            const cards = document.querySelectorAll(".entry-card");
+            const cards = document.querySelectorAll(".entry-window-card");
             let count = 0;
 
             cards.forEach(card => {
-                const text = card.querySelector("p").textContent.toLowerCase();
+                const text = card.querySelector(".entry-window-text").textContent.toLowerCase();
                 const mood = card.dataset.mood;
                 const matchesTerm = !term || text.includes(term);
                 const matchesMood = currentFilter === "all" || mood === currentFilter;
@@ -945,7 +642,7 @@
             }
         }
 
-        // Add entry listener
+        // Form Submit
         document.getElementById("journalForm").addEventListener("submit", (e) => {
             e.preventDefault();
             const entryInput = document.getElementById("entry");
@@ -968,12 +665,11 @@
 
             entryInput.value = "";
             updateCounter();
-            setMood("😊");
             renderAllEntries();
             renderTrackerBoxes();
         });
 
-        // Render All Entries
+        // Render Floating Entry Mini-Windows with Staggered Antigravity Delays
         function renderAllEntries() {
             const container = document.getElementById("journalCards");
             const countPill = document.getElementById("entryCountPill");
@@ -981,7 +677,7 @@
             const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
 
             container.innerHTML = "";
-            countPill.textContent = `${entries.length} ${entries.length === 1 ? 'Reflection' : 'Reflections'}`;
+            countPill.textContent = `${entries.length} ENTRIES`;
 
             if (entries.length === 0) {
                 emptyMsg.style.display = "block";
@@ -989,21 +685,30 @@
             }
             emptyMsg.style.display = "none";
 
-            entries.forEach(entry => {
+            const delays = ["", "antigravity-delay-1", "antigravity-delay-2", "antigravity-delay-3"];
+
+            entries.forEach((entry, idx) => {
                 const card = document.createElement("div");
-                card.className = "entry-card";
+                const floatClass = delays[idx % delays.length];
+                card.className = `retro-window entry-window-card antigravity-float ${floatClass}`;
                 card.dataset.mood = entry.mood;
+
                 card.innerHTML = `
-                    <p>${escapeText(entry.text)}</p>
-                    <div class="entry-footer-row">
-                        <small>${entry.mood} • ${entry.date} ${entry.time ? '• ' + entry.time : ''} • ${entry.day || ''}</small>
-                        <div class="entry-card-actions">
-                            <button class="action-icon-btn" title="Copy reflection" onclick="copyReflection('${entry.id}')">
-                                <i class="bi bi-clipboard"></i>
-                            </button>
-                            <button class="action-icon-btn delete-btn" title="Delete reflection" onclick="deleteEntry('${entry.id}')">
-                                <i class="bi bi-trash3"></i>
-                            </button>
+                    <div class="window-titlebar">
+                        <div class="window-title">
+                            <span>${entry.mood}</span>
+                            <span>reflection_${entries.length - idx}.txt</span>
+                        </div>
+                        <div class="window-controls">
+                            <button class="window-btn" onclick="copyReflection('${entry.id}')" title="Copy">📋</button>
+                            <button class="window-btn" onclick="deleteEntry('${entry.id}')" title="Delete">✕</button>
+                        </div>
+                    </div>
+                    <div class="window-body entry-window-body">
+                        <p class="entry-window-text">${escapeText(entry.text)}</p>
+                        <div class="entry-window-footer">
+                            <span class="entry-meta-stamp">${entry.date} ${entry.time ? '• ' + entry.time : ''} • ${entry.day || ''}</span>
+                            <span class="pixel-pill" style="font-size:0.7rem; padding:1px 6px;">${entry.mood} Logged</span>
                         </div>
                     </div>
                 `;
@@ -1023,7 +728,6 @@
             }
         }
 
-        // Delete Entry by ID
         function deleteEntry(id) {
             if (!confirm("Are you sure you want to delete this reflection?")) return;
             let entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
@@ -1033,7 +737,7 @@
             renderTrackerBoxes();
         }
 
-        // Consistency Heatmap (35 Days)
+        // Activity Matrix (35 Days)
         function renderTrackerBoxes() {
             const tracker = document.getElementById("tracker");
             const streakPill = document.getElementById("streakPill");
@@ -1042,7 +746,6 @@
             tracker.innerHTML = "";
             const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
             
-            // Map dates
             const dateCounts = {};
             entries.forEach(e => {
                 if (e.date) {
@@ -1052,26 +755,25 @@
             });
 
             const today = new Date();
-            let activeDays = 0;
 
             for (let i = 0; i < 35; i++) {
                 const box = document.createElement("div");
-                box.className = "box";
+                box.className = "pixel-box";
 
                 const day = new Date();
                 day.setDate(today.getDate() - (34 - i));
                 const dateString = day.toLocaleDateString();
+                const count = dateCounts[dateString] || 0;
 
-                if (dateCounts[dateString]) {
-                    box.classList.add("active");
-                    activeDays++;
-                }
+                if (count === 1) box.classList.add("active-1");
+                else if (count === 2) box.classList.add("active-2");
+                else if (count >= 3) box.classList.add("active-3");
 
-                box.title = `${day.toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${dateCounts[dateString] || 0} reflections`;
+                box.title = `${day.toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${count} reflections`;
                 tracker.appendChild(box);
             }
 
-            // Calculate streak
+            // Streak calculation
             let streak = 0;
             const check = new Date();
             if (dateCounts[check.toLocaleDateString()]) {
@@ -1086,7 +788,7 @@
             }
 
             if (streakPill) {
-                streakPill.innerHTML = `<i class="bi bi-fire"></i> ${streak} Day Streak`;
+                streakPill.textContent = `${streak} DAY STREAK`;
             }
         }
 
