@@ -1,4 +1,6 @@
 import os
+import uuid
+import base64
 from datetime import datetime
 from flask import Flask, request, jsonify, session, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +12,8 @@ CORS(app, supports_credentials=True)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "secret123")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 db = SQLAlchemy(app)
 
@@ -30,6 +34,7 @@ class Entry(db.Model):
     mood = db.Column(db.String(20), default="😊")
     date_str = db.Column(db.String(100), nullable=True)
     day_str = db.Column(db.String(50), nullable=True)
+    media_url = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -40,6 +45,7 @@ class Entry(db.Model):
             "mood": self.mood,
             "date": self.date_str or self.created_at.strftime("%b %d, %Y"),
             "day": self.day_str or self.created_at.strftime("%A"),
+            "media_url": self.media_url,
             "created_at": self.created_at.isoformat()
         }
 
@@ -107,6 +113,41 @@ def logout():
     session.pop("user", None)
     return jsonify({"success": True, "message": "Logged out"})
 
+@app.route("/api/upload-media", methods=["POST"])
+def upload_media():
+    try:
+        # 1. Check if multipart file was uploaded
+        if "file" in request.files:
+            file = request.files["file"]
+            if file.filename:
+                ext = file.filename.split(".")[-1].lower() or "webm"
+                filename = f"webcam_{uuid.uuid4().hex[:10]}.{ext}"
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
+                url = f"/static/uploads/{filename}"
+                return jsonify({"success": True, "url": url})
+
+        # 2. Check if base64 image data was sent via JSON
+        data = request.get_json(silent=True) or {}
+        image_data = data.get("image_base64")
+        if image_data and "," in image_data:
+            header, encoded = image_data.split(",", 1)
+            ext = "png"
+            if "jpeg" in header or "jpg" in header:
+                ext = "jpg"
+            elif "webm" in header:
+                ext = "webm"
+            filename = f"snapshot_{uuid.uuid4().hex[:10]}.{ext}"
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+            with open(filepath, "wb") as f:
+                f.write(base64.b64decode(encoded))
+            url = f"/static/uploads/{filename}"
+            return jsonify({"success": True, "url": url})
+
+        return jsonify({"success": False, "message": "No valid media provided"}), 400
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
 @app.route("/api/entries", methods=["GET", "POST"])
 def handle_entries():
     current_user = session.get("user")
@@ -121,7 +162,8 @@ def handle_entries():
             text=text,
             mood=data.get("mood", "😊"),
             date_str=data.get("date"),
-            day_str=data.get("day")
+            day_str=data.get("day"),
+            media_url=data.get("media_url")
         )
         db.session.add(entry)
         db.session.commit()

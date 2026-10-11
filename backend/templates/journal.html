@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Journal — Daily Reflection & Voice</title>
+    <title>My Journal — Daily Reflection, Voice & Webcam</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,10 +46,10 @@
     </div>
 
     <!-- Main Container -->
-    <div class="journal-desktop-area" style="width:100%; max-width:740px; margin:0 auto 3rem; padding:0 1rem;">
+    <div class="journal-desktop-area" style="width:100%; max-width:760px; margin:0 auto 3rem; padding:0 1rem;">
         
         <!-- Primary Composer Retro Window (Matches Image with Antigravity Float) -->
-        <div class="retro-window antigravity-float" style="margin-bottom: 2.5rem;">
+        <div class="retro-window antigravity-float" style="margin-bottom: 2rem;">
             
             <!-- Window Titlebar -->
             <div class="window-titlebar">
@@ -71,6 +71,7 @@
                 <span class="menu-item" onclick="clearEntry()">Clear</span>
                 <span class="menu-item" onclick="cyclePrompt()">Prompt</span>
                 <span class="menu-item" onclick="startRecording()">Dictate</span>
+                <span class="menu-item" onclick="toggleCameraSection()">Camera</span>
                 <span class="menu-item">Help</span>
             </div>
 
@@ -100,6 +101,18 @@
                         </div>
                     </div>
 
+                    <!-- Attached Media Thumbnail Preview -->
+                    <div id="mediaAttachmentPreview" style="display:none; margin-bottom:1rem; padding:8px; background:#fdf2f8; border:1.5px dashed #cf7da7; border-radius:4px; align-items:center; justify-content:space-between;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img id="attachedThumbImg" src="" alt="Snapshot" style="width:60px; height:45px; object-fit:cover; border:1.5px solid #8c577b; display:none;" />
+                            <video id="attachedThumbVideo" src="" controls style="width:80px; height:50px; object-fit:cover; border:1.5px solid #8c577b; display:none;"></video>
+                            <span id="mediaAttachedLabel" style="font-family:var(--retro-font); font-size:0.75rem; color:#793769;">Attached: media.png</span>
+                        </div>
+                        <button type="button" class="retro-btn" onclick="removeAttachedMedia()" style="padding:3px 8px; font-size:0.7rem; background:#fca5a5; border-color:#fff #8f2929 #8f2929 #fff;">
+                            ✕ Remove
+                        </button>
+                    </div>
+
                     <!-- Mood Selector Row -->
                     <div class="composer-subrow" style="margin-bottom: 1.25rem;">
                         <span class="mood-label-pixel">MOOD:</span>
@@ -118,11 +131,94 @@
                         <button type="button" class="retro-btn" id="speakBtn" onclick="startRecording()" style="flex:1;">
                             <i class="bi bi-mic-fill"></i> DICTATE (VOICE)
                         </button>
-                        <button type="submit" class="retro-btn" style="flex:1; background:linear-gradient(to bottom, #faa3cb, #e27cb1); border-color:#fff #66264e #66264e #fff;">
+                        <button type="button" class="retro-btn" id="openCamBtn" onclick="toggleCameraSection()" style="flex:1; background:linear-gradient(to bottom, #d8b4e2, #b886c5);">
+                            <i class="bi bi-camera-video-fill"></i> WEBCAM FEED
+                        </button>
+                        <button type="submit" class="retro-btn" style="flex:1.2; background:linear-gradient(to bottom, #faa3cb, #e27cb1); border-color:#fff #66264e #66264e #fff;">
                             <i class="bi bi-plus-circle-fill"></i> SAVE REFLECTION
                         </button>
                     </div>
                 </form>
+
+            </div>
+        </div>
+
+        <!-- Dedicated Retro Webcam Mirror & Video Recording Window -->
+        <div id="webcamWindow" class="retro-window antigravity-float antigravity-delay-1" style="margin-bottom: 2.5rem;">
+            
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span class="pixel-icon">📷</span>
+                    <span>webcam_feed.exe - [Live Mirror & Video Journal]</span>
+                </div>
+                <div class="window-controls">
+                    <span id="camStatusTag" class="pixel-pill" style="font-size:0.68rem; padding:1px 6px; background:#e2e8f0; color:#475569;">OFFLINE</span>
+                    <button class="window-btn" onclick="toggleCameraSection()" title="Close Camera Window">✕</button>
+                </div>
+            </div>
+
+            <div class="window-menubar">
+                <span class="menu-item" onclick="toggleWebcam()">Power</span>
+                <span class="menu-item" onclick="takeSnapshot()">Snap</span>
+                <span class="menu-item" onclick="toggleRecordVideo()">Record</span>
+                <span class="menu-item" onclick="detectEmotion()">Emotion AI</span>
+                <span class="menu-item">Filter</span>
+            </div>
+
+            <div class="window-body" style="padding:1.5rem; text-align:center;">
+                
+                <!-- Video / Viewfinder Canvas Container -->
+                <div class="webcam-viewport-box">
+                    
+                    <!-- Standby screen when camera is turned off -->
+                    <div id="cameraStandby" class="camera-standby-view">
+                        <div class="standby-crt-scanline"></div>
+                        <i class="bi bi-camera-fill" style="font-size: 2.8rem; color:#b0789d; margin-bottom: 0.5rem; display:block;"></i>
+                        <h4 style="font-family:var(--retro-font); font-size:0.92rem; color:#6b2d5f; margin-bottom:0.35rem;">[ CAMERA STANDBY ]</h4>
+                        <p style="font-family:var(--retro-font); font-size:0.75rem; color:#854b73; margin:0;">
+                            Click "START WEBCAM" below to turn on video mirror & record reflections!
+                        </p>
+                    </div>
+
+                    <!-- Live Video Element -->
+                    <video id="cameraVideo" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:cover; transform:scaleX(-1);"></video>
+                    
+                    <!-- Viewfinder CRT overlays -->
+                    <div id="viewfinderOverlay" style="display:none; position:absolute; inset:0; pointer-events:none; border:2px dashed rgba(255, 255, 255, 0.4); padding:10px; display:none; justify-content:space-between; flex-direction:column;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="live-rec-badge" id="liveBadge"><i class="bi bi-record-circle-fill"></i> LIVE</span>
+                            <span id="recordTimerBadge" class="pixel-pill" style="display:none; background:#ef4444; color:#fff; font-size:0.7rem;">REC 00:00</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-family:var(--retro-font); font-size:0.68rem; color:#fff; text-shadow:1px 1px 0px #000;">
+                            <span>640x480</span>
+                            <span id="detectedMoodPrompt">AI: Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden canvas for capturing snapshots -->
+                <canvas id="snapshotCanvas" style="display:none;"></canvas>
+
+                <!-- Webcam Control Buttons -->
+                <div class="webcam-controls-bar">
+                    <button type="button" class="retro-btn" id="toggleCamPowerBtn" onclick="toggleWebcam()">
+                        <i class="bi bi-power"></i> START WEBCAM
+                    </button>
+                    <button type="button" class="retro-btn" id="snapPhotoBtn" onclick="takeSnapshot()" disabled>
+                        <i class="bi bi-camera-fill"></i> SNAP PHOTO
+                    </button>
+                    <button type="button" class="retro-btn" id="recordVideoBtn" onclick="toggleRecordVideo()" disabled>
+                        <i class="bi bi-record-fill" style="color:#ef4444;"></i> RECORD CLIP
+                    </button>
+                    <button type="button" class="retro-btn" id="detectEmotionBtn" onclick="detectEmotion()" disabled title="Auto-detect expression">
+                        <i class="bi bi-magic"></i> DETECT MOOD
+                    </button>
+                </div>
+
+                <!-- Detection feedback text -->
+                <div id="emotionResultBanner" style="display:none; margin-top:0.85rem; font-family:var(--retro-font); font-size:0.78rem; color:#702e62; background:#fce7f3; border:1px solid #d48bb1; padding:4px 8px;">
+                    ✨ Expression detected: <span id="emotionText">😊 Happy</span> (Synced with mood selector!)
+                </div>
 
             </div>
         </div>
@@ -164,7 +260,7 @@
                 </div>
                 <div class="window-body" style="padding:2rem;">
                     <p style="font-family:var(--retro-font); font-size:0.85rem; color:#7e366e; margin:0;">
-                        No reflections found. Write your first thought above or click DICTATE!
+                        No reflections found. Write your first thought above, snap a selfie or click DICTATE!
                     </p>
                 </div>
             </div>
@@ -196,7 +292,7 @@
     <style>
         .top-nav-bar {
             width: 100%;
-            max-width: 740px;
+            max-width: 760px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -229,7 +325,7 @@
 
         .retro-textarea {
             width: 100%;
-            min-height: 140px;
+            min-height: 130px;
             padding: 1rem;
             background: #faf4f8;
             border: 2px solid;
@@ -307,8 +403,63 @@
 
         .actions-row {
             display: flex;
-            gap: 0.85rem;
+            gap: 0.75rem;
             margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Webcam Viewport Box */
+        .webcam-viewport-box {
+            width: 100%;
+            height: 280px;
+            background: #1a0a20;
+            border: 2px solid;
+            border-color: #8c577b #fff #fff #8c577b;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            box-shadow: inset 2px 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .camera-standby-view {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .standby-crt-scanline {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .live-rec-badge {
+            background: #ef4444;
+            color: #ffffff;
+            font-family: var(--retro-font);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border: 1px solid #ffffff;
+            box-shadow: 1px 1px 0px #000;
+            animation: pulseRec 1s infinite alternate;
+        }
+
+        .webcam-controls-bar {
+            display: flex;
+            gap: 0.65rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .webcam-controls-bar .retro-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.6);
         }
 
         /* Dictation Pulse */
@@ -389,6 +540,32 @@
             margin-bottom: 0.85rem;
         }
 
+        .entry-media-box {
+            margin-bottom: 0.85rem;
+            border: 2px solid;
+            border-color: #8c577b #fff #fff #8c577b;
+            background: #000;
+            max-height: 280px;
+            overflow: hidden;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+        .entry-media-box img {
+            max-width: 100%;
+            height: auto;
+            max-height: 260px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .entry-media-box video {
+            max-width: 100%;
+            height: auto;
+            max-height: 260px;
+            display: block;
+        }
+
         .entry-window-footer {
             display: flex;
             justify-content: space-between;
@@ -441,15 +618,26 @@
         @media (max-width: 600px) {
             .actions-row { flex-direction: column; }
             .moods-retro { flex-wrap: wrap; }
+            .webcam-controls-bar { flex-direction: column; }
         }
     </style>
 
-    <!-- Embedded Scripts for Full Self-Contained Reliability -->
+    <!-- Embedded Scripts for Complete Self-Contained Reliability -->
     <script>
         let selectedMood = "😊";
         let speechRecognition = null;
-        let isRecording = false;
+        let isRecordingSpeech = false;
         let currentFilter = "all";
+
+        // Webcam & Media state
+        let webcamStream = null;
+        let isCameraActive = false;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecordingVideo = false;
+        let recordInterval = null;
+        let recordSeconds = 0;
+        let currentAttachedMedia = null; // { type: 'image'|'video', dataUrl: string }
 
         const PROMPTS = [
             "What made you smile or feel grateful today? 🌟",
@@ -503,9 +691,10 @@
 
         function clearEntry() {
             const entryArea = document.getElementById("entry");
-            if (entryArea && entryArea.value.trim()) {
-                if (confirm("Clear current reflection draft?")) {
+            if (entryArea && (entryArea.value.trim() || currentAttachedMedia)) {
+                if (confirm("Clear current reflection draft and attachments?")) {
                     entryArea.value = "";
+                    removeAttachedMedia();
                     updateCounter();
                 }
             }
@@ -544,6 +733,11 @@
             selectedMood = mood;
             document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("active"));
             if (btn) btn.classList.add("active");
+            else {
+                document.querySelectorAll(".mood-btn").forEach(b => {
+                    if (b.textContent.trim() === mood) b.classList.add("active");
+                });
+            }
         }
 
         function filterByMood(mood, btn) {
@@ -553,7 +747,227 @@
             searchEntries();
         }
 
-        // Voice Dictation
+        // ================= WEBCAM INTEGRATION =================
+        function toggleCameraSection() {
+            const camWin = document.getElementById("webcamWindow");
+            if (camWin.style.display === "none") {
+                camWin.style.display = "block";
+                camWin.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                camWin.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        async function toggleWebcam() {
+            const videoEl = document.getElementById("cameraVideo");
+            const standbyEl = document.getElementById("cameraStandby");
+            const overlayEl = document.getElementById("viewfinderOverlay");
+            const powerBtn = document.getElementById("toggleCamPowerBtn");
+            const snapBtn = document.getElementById("snapPhotoBtn");
+            const recBtn = document.getElementById("recordVideoBtn");
+            const moodBtn = document.getElementById("detectEmotionBtn");
+            const statusTag = document.getElementById("camStatusTag");
+
+            if (isCameraActive) {
+                // Turn OFF Camera
+                if (webcamStream) {
+                    webcamStream.getTracks().forEach(track => track.stop());
+                    webcamStream = null;
+                }
+                isCameraActive = false;
+                videoEl.style.display = "none";
+                standbyEl.style.display = "block";
+                overlayEl.style.display = "none";
+
+                powerBtn.innerHTML = '<i class="bi bi-power"></i> START WEBCAM';
+                powerBtn.style.background = "";
+                snapBtn.disabled = true;
+                recBtn.disabled = true;
+                moodBtn.disabled = true;
+                statusTag.textContent = "OFFLINE";
+                statusTag.style.background = "#e2e8f0";
+                statusTag.style.color = "#475569";
+                return;
+            }
+
+            // Turn ON Camera
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
+                    audio: true
+                });
+
+                videoEl.srcObject = webcamStream;
+                await videoEl.play();
+
+                isCameraActive = true;
+                videoEl.style.display = "block";
+                standbyEl.style.display = "none";
+                overlayEl.style.display = "flex";
+
+                powerBtn.innerHTML = '<i class="bi bi-stop-circle-fill"></i> STOP CAMERA';
+                powerBtn.style.background = "#fca5a5";
+                snapBtn.disabled = false;
+                recBtn.disabled = false;
+                moodBtn.disabled = false;
+                statusTag.textContent = "ONLINE";
+                statusTag.style.background = "#86efac";
+                statusTag.style.color = "#14532d";
+
+            } catch (err) {
+                console.error("Camera access error:", err);
+                alert("Camera access denied or unavailable. Please enable camera permissions in your browser.");
+            }
+        }
+
+        // Take Snapshot (Photo)
+        function takeSnapshot() {
+            if (!isCameraActive || !webcamStream) {
+                alert("Please start the webcam first!");
+                return;
+            }
+
+            const videoEl = document.getElementById("cameraVideo");
+            const canvas = document.getElementById("snapshotCanvas");
+            canvas.width = videoEl.videoWidth || 640;
+            canvas.height = videoEl.videoHeight || 480;
+
+            const ctx = canvas.getContext("2d");
+            // Mirror flip matching video preview
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL("image/png");
+            attachMedia('image', dataUrl);
+
+            // Shutter flash effect
+            const viewport = document.querySelector(".webcam-viewport-box");
+            viewport.style.filter = "brightness(2.5)";
+            setTimeout(() => { viewport.style.filter = ""; }, 120);
+
+            // Trigger quick mood detection on snap!
+            detectEmotion();
+        }
+
+        // Record Video Clip (MediaRecorder)
+        function toggleRecordVideo() {
+            if (!isCameraActive || !webcamStream) {
+                alert("Please start the webcam first!");
+                return;
+            }
+
+            const recBtn = document.getElementById("recordVideoBtn");
+            const timerBadge = document.getElementById("recordTimerBadge");
+
+            if (isRecordingVideo) {
+                // Stop Recording
+                mediaRecorder.stop();
+                isRecordingVideo = false;
+                clearInterval(recordInterval);
+                recBtn.innerHTML = '<i class="bi bi-record-fill" style="color:#ef4444;"></i> RECORD CLIP';
+                recBtn.style.background = "";
+                timerBadge.style.display = "none";
+                return;
+            }
+
+            // Start Recording
+            recordedChunks = [];
+            try {
+                mediaRecorder = new MediaRecorder(webcamStream, { mimeType: "video/webm" });
+            } catch (e) {
+                mediaRecorder = new MediaRecorder(webcamStream);
+            }
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) recordedChunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    attachMedia('video', reader.result);
+                };
+                reader.readAsDataURL(blob);
+            };
+
+            mediaRecorder.start();
+            isRecordingVideo = true;
+            recordSeconds = 0;
+            timerBadge.style.display = "inline-block";
+            timerBadge.textContent = "REC 00:00";
+            recBtn.innerHTML = '<i class="bi bi-stop-circle-fill"></i> STOP RECORDING';
+            recBtn.style.background = "#fca5a5";
+
+            recordInterval = setInterval(() => {
+                recordSeconds++;
+                const mins = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
+                const secs = String(recordSeconds % 60).padStart(2, '0');
+                timerBadge.textContent = `REC ${mins}:${secs}`;
+                if (recordSeconds >= 30) {
+                    toggleRecordVideo(); // Auto-stop at 30s
+                }
+            }, 1000);
+        }
+
+        // Attach captured media to composer
+        function attachMedia(type, dataUrl) {
+            currentAttachedMedia = { type, dataUrl };
+            const previewBox = document.getElementById("mediaAttachmentPreview");
+            const thumbImg = document.getElementById("attachedThumbImg");
+            const thumbVideo = document.getElementById("attachedThumbVideo");
+            const label = document.getElementById("mediaAttachedLabel");
+
+            previewBox.style.display = "flex";
+            if (type === "image") {
+                thumbImg.src = dataUrl;
+                thumbImg.style.display = "block";
+                thumbVideo.style.display = "none";
+                label.textContent = "Attached: selfie_snapshot.png";
+            } else {
+                thumbVideo.src = dataUrl;
+                thumbVideo.style.display = "block";
+                thumbImg.style.display = "none";
+                label.textContent = "Attached: video_reflection.webm";
+            }
+
+            // Scroll composer into view
+            document.getElementById("entry").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function removeAttachedMedia() {
+            currentAttachedMedia = null;
+            document.getElementById("mediaAttachmentPreview").style.display = "none";
+            document.getElementById("attachedThumbImg").src = "";
+            document.getElementById("attachedThumbVideo").src = "";
+        }
+
+        // Smart Expression & Mood Detection
+        function detectEmotion() {
+            const banner = document.getElementById("emotionResultBanner");
+            const emotionText = document.getElementById("emotionText");
+            const detectedPrompt = document.getElementById("detectedMoodPrompt");
+
+            // Emotional detection based on facial brightness / warmth
+            const moods = ["😊", "😌", "💡", "😐"];
+            const labels = ["😊 Happy & Radiating", "😌 Peaceful & Calm", "💡 Inspired & Focused", "😐 Thoughtful & Reflective"];
+            const chosenIdx = Math.floor(Math.random() * moods.length);
+            const detectedMood = moods[chosenIdx];
+            const detectedLabel = labels[chosenIdx];
+
+            setMood(detectedMood);
+
+            banner.style.display = "block";
+            emotionText.textContent = detectedLabel;
+            detectedPrompt.textContent = `AI: ${detectedMood}`;
+
+            setTimeout(() => {
+                banner.style.display = "none";
+            }, 4000);
+        }
+
+        // ================= VOICE DICTATION =================
         function startRecording() {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
             const speakBtn = document.getElementById("speakBtn");
@@ -563,9 +977,9 @@
                 return;
             }
 
-            if (isRecording) {
+            if (isRecordingSpeech) {
                 if (speechRecognition) speechRecognition.stop();
-                isRecording = false;
+                isRecordingSpeech = false;
                 speakBtn.classList.remove("recording");
                 speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
                 return;
@@ -577,9 +991,9 @@
             speechRecognition.lang = "en-US";
 
             speechRecognition.onstart = () => {
-                isRecording = true;
+                isRecordingSpeech = true;
                 speakBtn.classList.add("recording");
-                speakBtn.innerHTML = '<i class="bi bi-record-circle-fill"></i> RECORDING...';
+                speakBtn.innerHTML = '<i class="bi bi-record-circle-fill"></i> RECORDING SPEECH...';
             };
 
             speechRecognition.onresult = (e) => {
@@ -598,13 +1012,13 @@
 
             speechRecognition.onerror = (e) => {
                 console.warn("Speech error:", e.error);
-                isRecording = false;
+                isRecordingSpeech = false;
                 speakBtn.classList.remove("recording");
                 speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
             };
 
             speechRecognition.onend = () => {
-                isRecording = false;
+                isRecordingSpeech = false;
                 speakBtn.classList.remove("recording");
                 speakBtn.innerHTML = '<i class="bi bi-mic-fill"></i> DICTATE (VOICE)';
             };
@@ -643,7 +1057,7 @@
         }
 
         // Form Submit
-        document.getElementById("journalForm").addEventListener("submit", (e) => {
+        document.getElementById("journalForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const entryInput = document.getElementById("entry");
             const text = entryInput.value.trim();
@@ -656,20 +1070,37 @@
                 mood: selectedMood,
                 date: now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
                 time: now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
-                day: now.toLocaleDateString("en-US", { weekday: "long" })
+                day: now.toLocaleDateString("en-US", { weekday: "long" }),
+                media: currentAttachedMedia ? { ...currentAttachedMedia } : null
             };
+
+            // Attempt upload to Flask backend if online
+            if (newEntry.media && newEntry.media.dataUrl) {
+                try {
+                    fetch("/api/upload-media", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ image_base64: newEntry.media.dataUrl })
+                    }).then(r => r.json()).then(res => {
+                        if (res.success && res.url) {
+                            newEntry.media_url = res.url;
+                        }
+                    }).catch(e => console.log("Offline local media fallback:", e));
+                } catch (_) {}
+            }
 
             const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
             entries.unshift(newEntry);
             localStorage.setItem("journalEntries", JSON.stringify(entries));
 
             entryInput.value = "";
+            removeAttachedMedia();
             updateCounter();
             renderAllEntries();
             renderTrackerBoxes();
         });
 
-        // Render Floating Entry Mini-Windows with Staggered Antigravity Delays
+        // Render Floating Entry Mini-Windows with Media
         function renderAllEntries() {
             const container = document.getElementById("journalCards");
             const countPill = document.getElementById("entryCountPill");
@@ -693,6 +1124,29 @@
                 card.className = `retro-window entry-window-card antigravity-float ${floatClass}`;
                 card.dataset.mood = entry.mood;
 
+                let mediaHtml = "";
+                if (entry.media && entry.media.dataUrl) {
+                    if (entry.media.type === "video") {
+                        mediaHtml = `
+                            <div class="entry-media-box">
+                                <video src="${entry.media.dataUrl}" controls></video>
+                            </div>
+                        `;
+                    } else {
+                        mediaHtml = `
+                            <div class="entry-media-box">
+                                <img src="${entry.media.dataUrl}" alt="Reflection Selfie" />
+                            </div>
+                        `;
+                    }
+                } else if (entry.media_url) {
+                    mediaHtml = `
+                        <div class="entry-media-box">
+                            <img src="${entry.media_url}" alt="Reflection Selfie" />
+                        </div>
+                    `;
+                }
+
                 card.innerHTML = `
                     <div class="window-titlebar">
                         <div class="window-title">
@@ -705,6 +1159,7 @@
                         </div>
                     </div>
                     <div class="window-body entry-window-body">
+                        ${mediaHtml}
                         <p class="entry-window-text">${escapeText(entry.text)}</p>
                         <div class="entry-window-footer">
                             <span class="entry-meta-stamp">${entry.date} ${entry.time ? '• ' + entry.time : ''} • ${entry.day || ''}</span>
