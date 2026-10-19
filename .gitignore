@@ -1,0 +1,12 @@
+.env
+.env.local
+.venv/
+__pycache__/
+*.sqlite3
+static/uploads/
+backend/instance/secret_key
+backend/instance/private_uploads/
+instance/secret_key
+instance/private_uploads/
+instance/database.db
+backend/__pycache__/

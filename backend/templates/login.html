@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In — My Journal</title>
+    <title>Sign In — Pour-It-Out</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +16,7 @@
     <link rel="stylesheet" href="/static/style.css">
 
     <!-- Scripts -->
-    <script src="../static/script.js" defer></script>
-    <script src="/static/script.js" defer></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
 <body>
 
@@ -25,7 +24,7 @@
     <header class="navbar">
         <div class="logo">
             <a href="home.html" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-                <h1>💻 My_Journal.exe</h1>
+                <h1>💻 Pour-It-Out.exe</h1>
             </a>
         </div>
         <ul>
@@ -100,7 +99,7 @@
 
     <!-- Retro Footer -->
     <footer class="footer">
-        &copy; 2026 <strong>My Journal</strong>. Your thoughts, completely safe and private.
+        &copy; 2026 <strong>Pour-It-Out</strong>. Your thoughts, completely safe and private.
     </footer>
 
 </body>

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journal — Retro Pixel Sanctuary</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <title>Pour-It-Out — Retro Pixel Sanctuary</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,8 +19,7 @@
     <link rel="stylesheet" href="/static/home.css">
 
     <!-- Scripts -->
-    <script src="../static/script.js" defer></script>
-    <script src="/static/script.js" defer></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
 <body>
 
@@ -27,7 +27,8 @@
     <header class="navbar">
         <div class="logo">
             <a href="home.html" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-                <h1>💻 My_Journal.exe</h1>
+                <img class="icon" src="{{ url_for('static', filename='images/favicon.png') }}" alt="Favicon">
+                <h1> Pour-It-Out.exe</h1>
             </a>
         </div>
         <ul>
@@ -75,7 +76,7 @@
                 <div class="window-titlebar">
                     <div class="window-title">
                         <span class="pixel-icon">💻</span>
-                        <span>untitled - My Journal</span>
+                        <span>untitled - Pour-It-Out</span>
                     </div>
                     <div class="window-controls">
                         <button class="window-btn" title="Minimize">—</button>
@@ -100,7 +101,7 @@
                         <span class="canvas-date"><i class="bi bi-clock"></i> Sunday • 9:42 PM</span>
                     </div>
 
-                    <h2 class="canvas-lead-title">WELCOME TO MY JOURNAL</h2>
+                    <h2 class="canvas-lead-title">WELCOME TO POUR-IT-OUT</h2>
                     <p class="canvas-body-text">
                         "Took a peaceful evening walk by the lake. The sunset painted the clouds in shades of violet and dusty rose. 
                         Realized that true clarity doesn't come from forcing answers—it gently unfolds when you quiet the noise."
@@ -261,7 +262,7 @@
                 <h2>Ready to write your first reflection?</h2>
                 <p>Open your personal space where daily thoughts turn into lifelong wisdom.</p>
                 <a href="journal.html" class="retro-btn" style="padding:10px 24px;">
-                    LAUNCH MY JOURNAL NOW &rarr;
+                    LAUNCH POUR-IT-OUT NOW &rarr;
                 </a>
             </div>
         </div>
@@ -269,7 +270,7 @@
 
     <!-- Retro Footer -->
     <footer class="footer">
-        &copy; 2026 <strong>My Journal</strong>. Built with nostalgic pixel love & antigravity physics.
+        &copy; 2026 <strong>Pour-It-Out</strong>. Built with nostalgic pixel love & antigravity physics.
     </footer>
 
 </body>

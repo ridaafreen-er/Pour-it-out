@@ -3,6 +3,13 @@
    ========================================================================== */
 
 /* Hero Container */
+.icon{
+  
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
 .hero-section {
   position: relative;
   padding: 3.5rem 1.5rem 4.5rem;

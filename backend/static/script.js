@@ -48,7 +48,7 @@ function toggleTheme() {
 function initPasswordToggles() {
     document.querySelectorAll(".btn-toggle-pwd, .password-toggle").forEach(btn => {
         btn.addEventListener("click", () => {
-            const container = btn.closest(".input-with-icon, .form-field-group, .loginn, .registerFormm");
+            const container = btn.closest(".input-row-pwd, .input-with-icon, .form-field-group, .loginn, .registerFormm");
             const input = container ? container.querySelector("input[type='password'], input[type='text']") : null;
             const icon = btn.querySelector("i");
             if (input) {
@@ -126,16 +126,15 @@ function initAuthForms() {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    showToast("Account created successfully! Redirecting to login...", "success");
-                    setTimeout(() => { window.location.href = "login.html"; }, 1000);
+                    showToast("Account created! Moving your temporary reflections to your account...", "success");
+                    setTimeout(() => { window.location.href = "journal.html"; }, 1000);
                 } else {
                     showToast(data.message || "Registration failed", "error");
                     setLoading(submitBtn, false, "Create Account");
                 }
             } catch (err) {
-                // Static / Live Server fallback
-                showToast("Account created in demo mode! Redirecting...", "success");
-                setTimeout(() => { window.location.href = "login.html"; }, 1000);
+                showToast("Could not reach the server. Start the Flask app and try again.", "error");
+                setLoading(submitBtn, false, "Create Account");
             }
         });
     }
@@ -170,9 +169,8 @@ function initAuthForms() {
                     setLoading(submitBtn, false, "Sign In");
                 }
             } catch (err) {
-                // Static / Live Server fallback
-                showToast("Signed in locally! Welcome back ✨", "success");
-                setTimeout(() => { window.location.href = "journal.html"; }, 800);
+                showToast("Could not reach the server. Start the Flask app and try again.", "error");
+                setLoading(submitBtn, false, "Sign In");
             }
         });
     }

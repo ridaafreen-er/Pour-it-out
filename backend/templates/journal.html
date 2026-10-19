@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Journal — Daily Reflection, Voice & Webcam</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <title>Pour-It-Out — Daily Reflection, Voice & Webcam</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,31 +17,32 @@
     <link rel="stylesheet" href="/static/style.css">
 
     <!-- Scripts -->
-    <script src="../static/script.js" defer></script>
-    <script src="/static/script.js" defer></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
 <body>
 
     <!-- Retro Sidebar Drawer -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-family:var(--retro-font); color:#f7d2e4;">💻 My_Journal.exe</h3>
-            <button class="close-sidebar-btn" onclick="toggleNav()">&times;</button>
+            <img class="icon" src="{{ url_for('static', filename='images/favicon.png') }}" alt="Favicon">
+            <h3 style="font-family:var(--retro-font); color:#f7d2e4;">Pour-It-Out.exe</h3>
+            <button class="close-sidebar-btn" onclick="toggleNav(false)" aria-label="Close menu">&times;</button>
         </div>
         <a href="home.html"><i class="bi bi-house-door"></i> Home</a>
         <a href="journal.html" class="active"><i class="bi bi-journal-text"></i> Journal</a>
-        <a href="login.html"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        <a href="#" onclick="logoutUser(event)"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </div>
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleNav(false)"></div>
 
     <!-- Top Action Desktop Taskbar -->
     <div class="top-nav-bar">
-        <button class="retro-btn" onclick="toggleNav()" style="padding:4px 10px; font-size:0.75rem;" title="Open Menu">
+        <button class="retro-btn" onclick="toggleNav()" aria-controls="sidebar" aria-expanded="false" style="padding:4px 10px; font-size:0.75rem;" title="Open Menu">
             <i class="bi bi-list"></i> Start
         </button>
         <div class="date-badge" id="liveDateBadge">
             <i class="bi bi-calendar3"></i> <span id="currentDateText">Today</span>
         </div>
-        <button class="retro-btn btn-theme-toggle" onclick="toggleTheme()" style="padding:4px 10px; font-size:0.75rem;" title="Toggle Dark/Light Mode">
+        <button class="retro-btn btn-theme-toggle" style="padding:4px 10px; font-size:0.75rem;" title="Toggle Dark/Light Mode">
             <i class="bi bi-moon-stars" id="themeIcon"></i> Theme
         </button>
     </div>
@@ -57,8 +59,7 @@
             <!-- Window Titlebar -->
             <div class="window-titlebar">
                 <div class="window-title">
-                    <span class="pixel-icon">💻</span>
-                    <span>my_journal.txt - [Write]</span>
+                    <span>Pour-It-Out.txt - [Write]</span>
                 </div>
                 <div class="window-controls">
                     <button class="window-btn" onclick="window.location.href='home.html'" title="Home">⌂</button>
@@ -87,6 +88,7 @@
                         <i class="bi bi-lightbulb-fill" style="color:#d46f9f;"></i> <span id="promptText">PROMPT: What made you smile or feel grateful today? 🌟</span>
                     </span>
                 </div>
+                <p id="saveModeNotice" class="save-mode-notice" role="status">Checking save mode...</p>
 
                 <!-- Form -->
                 <form id="journalForm">
@@ -339,6 +341,38 @@
 
     <!-- Embedded Retro Specific Styles -->
     <style>
+       .icon{
+  
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 1001;
+            width: min(300px, 86vw);
+            padding: 1rem;
+            background: #24142b;
+            border-right: 2px solid #cf7da7;
+            box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
+            transform: translateX(-105%);
+            transition: transform 260ms ease;
+        }
+
+        .sidebar.is-open { transform: translateX(0); }
+        .sidebar-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .sidebar-header h3 { margin: 0; }
+        .close-sidebar-btn { margin-left: auto; font-size: 1.5rem; color: #fff; background: transparent; border: 0; cursor: pointer; }
+        .sidebar a { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 0.7rem; color: #f7d2e4; text-decoration: none; border-bottom: 1px solid rgba(247, 210, 228, 0.16); }
+        .sidebar a:hover, .sidebar a.active { background: rgba(207, 125, 167, 0.2); }
+        .sidebar-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(12, 5, 16, 0.58); opacity: 0; visibility: hidden; transition: opacity 260ms ease, visibility 260ms ease; }
+        .sidebar-backdrop.is-visible { opacity: 1; visibility: visible; }
+        body.sidebar-open { overflow: hidden; }
+        .save-mode-notice { margin: 0 0 1rem; font-family: var(--retro-font); font-size: 0.75rem; color: #7e366e; }
+        .save-mode-notice a { color: #853768; }
         .top-nav-bar {
             width: 100%;
             max-width: 1120px;
@@ -867,7 +901,12 @@
         ];
         let promptIndex = 0;
 
-        document.addEventListener("DOMContentLoaded", () => {
+        let journalEntries = [];
+        let journalAccount = null;
+        const GUEST_ENTRIES_KEY = "journalGuestEntries";
+        const ACCOUNT_ENTRIES_PREFIX = "journalEntries:";
+
+        document.addEventListener("DOMContentLoaded", async () => {
             // Live Date
             const dateEl = document.getElementById("currentDateText");
             if (dateEl) {
@@ -894,10 +933,98 @@
                 if (icon) icon.className = "bi bi-sun";
             }
 
-            // Load saved entries
+            // Load account entries or temporary guest entries.
+            await loadJournalEntries();
+            updateSaveModeNotice();
             renderAllEntries();
             renderTrackerBoxes();
         });
+
+        function readGuestEntries() {
+            try {
+                const currentEntries = localStorage.getItem(GUEST_ENTRIES_KEY);
+                if (currentEntries !== null) return JSON.parse(currentEntries) || [];
+
+                const previousEntries = JSON.parse(localStorage.getItem("journalEntries")) || [];
+                if (previousEntries.length) {
+                    localStorage.setItem(GUEST_ENTRIES_KEY, JSON.stringify(previousEntries));
+                    localStorage.removeItem("journalEntries");
+                }
+                return previousEntries;
+            } catch (_) {
+                return [];
+            }
+        }
+
+        function readStoredEntries(key) {
+            try {
+                return JSON.parse(localStorage.getItem(key)) || [];
+            } catch (_) {
+                return [];
+            }
+        }
+
+        function saveStoredEntries(key, entries) {
+            try {
+                if (entries.length) localStorage.setItem(key, JSON.stringify(entries));
+                else localStorage.removeItem(key);
+                return true;
+            } catch (error) {
+                if (error.name === "QuotaExceededError" || error.name === "NS_ERROR_DOM_QUOTA_REACHED") {
+                    showToast("This browser is out of storage. Remove a large video or attachment and try again.", "error");
+                    return false;
+                }
+                throw error;
+            }
+        }
+
+        function accountEntriesKey(username) {
+            return `${ACCOUNT_ENTRIES_PREFIX}${encodeURIComponent(username)}`;
+        }
+
+        async function loadJournalEntries() {
+            let response;
+            try {
+                response = await fetch("/api/session");
+            } catch (_) {
+                journalAccount = null;
+                journalEntries = readGuestEntries();
+                return;
+            }
+
+            if (response.status === 401) {
+                journalAccount = null;
+                journalEntries = readGuestEntries();
+                return;
+            }
+            if (!response.ok) {
+                journalAccount = null;
+                journalEntries = readGuestEntries();
+                return;
+            }
+
+            const data = await response.json();
+            journalAccount = data.username;
+            journalEntries = readStoredEntries(accountEntriesKey(journalAccount));
+            const pendingEntries = readGuestEntries();
+            if (pendingEntries.length) {
+                const existingIds = new Set(journalEntries.map(entry => String(entry.id)));
+                const newEntries = pendingEntries.filter(entry => !existingIds.has(String(entry.id)));
+                const combinedEntries = [...newEntries, ...journalEntries];
+                if (saveStoredEntries(accountEntriesKey(journalAccount), combinedEntries)) {
+                    journalEntries = combinedEntries;
+                    saveStoredEntries(GUEST_ENTRIES_KEY, []);
+                }
+            }
+        }
+
+        function updateSaveModeNotice() {
+            const notice = document.getElementById("saveModeNotice");
+            if (!notice) return;
+            notice.innerHTML = journalAccount
+                ? `Saved in this browser for <strong>${escapeText(journalAccount)}</strong>. It will not sync to other devices.`
+                : `Temporary mode: saved in this browser until you <a href="login.html">sign in</a> or <a href="register.html">register</a>.`;
+        }
 
         function updateCounter() {
             const text = document.getElementById("entry")?.value || "";
@@ -928,12 +1055,24 @@
             }
         }
 
-        function toggleNav() {
-            let sidebar = document.getElementById("sidebar");
-            if (sidebar.style.width === "240px") {
-                sidebar.style.width = "0";
-            } else {
-                sidebar.style.width = "240px";
+        function toggleNav(forceOpen) {
+            const sidebar = document.getElementById("sidebar");
+            const backdrop = document.getElementById("sidebarBackdrop");
+            const isOpen = typeof forceOpen === "boolean" ? forceOpen : !sidebar.classList.contains("is-open");
+            sidebar.classList.toggle("is-open", isOpen);
+            backdrop.classList.toggle("is-visible", isOpen);
+            document.body.classList.toggle("sidebar-open", isOpen);
+            document.querySelector(".top-nav-bar button[aria-controls='sidebar']")?.setAttribute("aria-expanded", String(isOpen));
+        }
+
+        async function logoutUser(event) {
+            event.preventDefault();
+            try {
+                const response = await fetch("/api/logout", { method: "POST" });
+                if (!response.ok) throw new Error("Logout failed");
+                window.location.href = "home.html";
+            } catch (_) {
+                showToast("Could not log out. Check your connection and try again.", "error");
             }
         }
 
@@ -1275,7 +1414,7 @@
         }
 
         // Form Submit
-        document.getElementById("journalForm").addEventListener("submit", async (e) => {
+        document.getElementById("journalForm").addEventListener("submit", (e) => {
             e.preventDefault();
             const entryInput = document.getElementById("entry");
             const text = entryInput.value.trim();
@@ -1292,24 +1431,13 @@
                 media: currentAttachedMedia ? { ...currentAttachedMedia } : null
             };
 
-            // Attempt upload to Flask backend if online
-            if (newEntry.media && newEntry.media.dataUrl) {
-                try {
-                    fetch("/api/upload-media", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ image_base64: newEntry.media.dataUrl })
-                    }).then(r => r.json()).then(res => {
-                        if (res.success && res.url) {
-                            newEntry.media_url = res.url;
-                        }
-                    }).catch(e => console.log("Offline local media fallback:", e));
-                } catch (_) {}
+            journalEntries.unshift(newEntry);
+            const storageKey = journalAccount ? accountEntriesKey(journalAccount) : GUEST_ENTRIES_KEY;
+            if (!saveStoredEntries(storageKey, journalEntries)) {
+                journalEntries.shift();
+                return;
             }
-
-            const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
-            entries.unshift(newEntry);
-            localStorage.setItem("journalEntries", JSON.stringify(entries));
+            showToast(journalAccount ? "Reflection saved in this browser for your account." : "Saved temporarily in this browser. Sign in to keep it with your account here.", "success");
 
             entryInput.value = "";
             removeAttachedMedia();
@@ -1323,7 +1451,7 @@
             const container = document.getElementById("journalCards");
             const countPill = document.getElementById("entryCountPill");
             const emptyMsg = document.getElementById("noEntriesMessage");
-            const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
+            const entries = journalEntries;
 
             container.innerHTML = "";
             countPill.textContent = `${entries.length} ENTRIES`;
@@ -1358,11 +1486,10 @@
                         `;
                     }
                 } else if (entry.media_url) {
-                    mediaHtml = `
-                        <div class="entry-media-box">
-                            <img src="${entry.media_url}" alt="Reflection Selfie" />
-                        </div>
-                    `;
+                    const mediaIsVideo = /\.(webm|mp4|ogg)(\?|$)/i.test(entry.media_url);
+                    mediaHtml = mediaIsVideo
+                        ? `<div class="entry-media-box"><video src="${entry.media_url}" controls></video></div>`
+                        : `<div class="entry-media-box"><img src="${entry.media_url}" alt="Reflection attachment" /></div>`;
                 }
 
                 card.innerHTML = `
@@ -1392,8 +1519,7 @@
         }
 
         function copyReflection(id) {
-            const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
-            const item = entries.find(e => e.id === id);
+            const item = journalEntries.find(e => String(e.id) === String(id));
             if (item) {
                 navigator.clipboard.writeText(item.text).then(() => {
                     alert("Reflection copied to clipboard! 📋");
@@ -1403,9 +1529,8 @@
 
         function deleteEntry(id) {
             if (!confirm("Are you sure you want to delete this reflection?")) return;
-            let entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
-            entries = entries.filter(e => e.id !== id);
-            localStorage.setItem("journalEntries", JSON.stringify(entries));
+            journalEntries = journalEntries.filter(entry => String(entry.id) !== String(id));
+            saveStoredEntries(journalAccount ? accountEntriesKey(journalAccount) : GUEST_ENTRIES_KEY, journalEntries);
             renderAllEntries();
             renderTrackerBoxes();
         }
@@ -1417,7 +1542,7 @@
             if (!tracker) return;
 
             tracker.innerHTML = "";
-            const entries = JSON.parse(localStorage.getItem("journalEntries")) || [];
+            const entries = journalEntries;
             
             const dateCounts = {};
             entries.forEach(e => {
